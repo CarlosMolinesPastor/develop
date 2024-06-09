@@ -1,10 +1,9 @@
 import flet as ft
 import os
-from flet import *
+
 from pyfiglet import Figlet
 import subprocess
 
-from flet_core.canvas import color
 from flet_core.colors import BLACK, WHITE
 
 
@@ -29,8 +28,6 @@ def main(page: ft.Page):
         leading=ft.Icon(ft.icons.HOME, color=WHITE),
         bgcolor=base_color,
         actions=[
-            ft.IconButton(ft.icons.WB_SUNNY_OUTLINED),
-            ft.IconButton(ft.icons.FILTER_3),
             ft.PopupMenuButton(
                 items=[
                     ft.PopupMenuItem(text="Credits"),
@@ -129,12 +126,22 @@ def main(page: ft.Page):
         check_color=BLACK,
     )
 
-    def compb_Apps_check(e):
+    def compb_apps_check(e):
         list_app = []
         if vscode.value:
-            list_app.append("visual-studio-code")
+            list_app.append("visual-studio-code-bin")
         if neovim.value:
             list_app.append("neovim")
+        if zed.value:
+            list_app.append("zed")
+        if geany.value:
+            list_app.append("geany geany-plugins")
+        if sublime.value:
+            list_app.append("sublime-text-4")
+        if bluefish.value:
+            list_app.append("bluefish")
+        if lapce.value:
+            list_app.append("lapce")
         if list_app:
             # Creamos de la lista un string con los nombres de las apps
             comand = " ".join(list_app)
@@ -146,7 +153,7 @@ def main(page: ft.Page):
     def openTerminal(e):
         os.system("xterm -e 'bash -c \"python3 --version; bash\" '")
 
-    My_Cmmnd = "sudo pacman -S"
+    My_Cmmnd = "sudo pacman -Syy && yay -S --noconfirm --needed"
     # My_Cmmnd2 = str(list_app)
 
     def execute_command(e):
@@ -154,12 +161,6 @@ def main(page: ft.Page):
             process = (
                 subprocess.Popen(
                     "xfce4-terminal -e 'bash -c \"" + My_Cmmnd + " " + e + ";bash\"' ",
-                    stdout=subprocess.PIPE,
-                    stderr=None,
-                    shell=True,
-                ),
-                subprocess.run(
-                    "xfce4-terminal -e 'bash -c \"" + "ls -la" + ";bash\"' ",
                     stdout=subprocess.PIPE,
                     stderr=None,
                     shell=True,
@@ -232,6 +233,14 @@ def main(page: ft.Page):
                                         ],
                                         width=150,
                                     ),
+                                    ft.ElevatedButton(
+                                        text="Install Editors",
+                                        color=ft.colors.WHITE,
+                                        bgcolor=base_color,
+                                        height=60,
+                                        width=170,
+                                        on_click=compb_apps_check,
+                                    ),
                                 ],
                                 scroll=ft.ScrollMode.AUTO,
                             ),
@@ -284,6 +293,14 @@ def main(page: ft.Page):
                                         ],
                                         width=150,
                                     ),
+                                    ft.ElevatedButton(
+                                        text="Install tecnologies",
+                                        color=ft.colors.WHITE,
+                                        bgcolor=base_color,
+                                        height=60,
+                                        width=170,
+                                        on_click=lambda: page.window_close,
+                                    ),
                                 ],
                                 scroll=ft.ScrollMode.AUTO,
                             ),
@@ -331,6 +348,14 @@ def main(page: ft.Page):
                                         ],
                                         width=150,
                                     ),
+                                    ft.ElevatedButton(
+                                        text="Install others",
+                                        color=ft.colors.WHITE,
+                                        bgcolor=base_color,
+                                        height=60,
+                                        width=170,
+                                        on_click=lambda: page.window_close,
+                                    ),
                                 ],
                                 scroll=ft.ScrollMode.AUTO,
                             ),
@@ -359,17 +384,9 @@ def main(page: ft.Page):
                     text="Exit",
                     color=ft.colors.WHITE,
                     bgcolor=base_color,
-                    height=50,
+                    height=60,
                     width=280,
                     on_click=lambda: page.window_close,
-                ),
-                ft.ElevatedButton(
-                    text="Install",
-                    color=ft.colors.WHITE,
-                    bgcolor=base_color,
-                    height=50,
-                    width=280,
-                    on_click=compb_Apps_check,  # lambda: print("installing..."),
                 ),
             ],
             vertical_alignment=ft.CrossAxisAlignment.CENTER,
