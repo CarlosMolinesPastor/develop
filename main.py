@@ -1,7 +1,7 @@
 import flet as ft
 import os
 
-from pyfiglet import Figlet
+# from pyfiglet import Figlet
 import subprocess, os, shutil
 from urllib import request
 from shlex import quote
@@ -159,7 +159,6 @@ def main(page: ft.Page):
         check_color=BLACK,
     )
 
-
     def is_installed(package):
         # Return True if the specified package is installed
         return pacman("-Q", package)["code"] == 0
@@ -198,7 +197,11 @@ def main(page: ft.Page):
         if list_editors:
             process = (
                 subprocess.Popen(
-                    "xfce4-terminal -e 'bash -c \"" + My_Cmmnd + " " + list_editors + ";bash\"' ",
+                    "xfce4-terminal -e 'bash -c \""
+                    + My_Cmmnd
+                    + " "
+                    + list_editors
+                    + ";bash\"' ",
                     stdout=subprocess.PIPE,
                     stderr=None,
                     shell=True,
@@ -224,7 +227,8 @@ def main(page: ft.Page):
                 # Añadimos los controles de la pagina
                 [
                     ft.AppBar(
-                        title=ft.Text("arch_develop :)", color=WHITE), bgcolor=ft.colors.RED_300
+                        title=ft.Text("arch_develop :)", color=WHITE),
+                        bgcolor=ft.colors.RED_300,
                     ),
                     ft.ElevatedButton(
                         "text editors",
@@ -310,8 +314,8 @@ def main(page: ft.Page):
                                             ),
                                             expand=True,
                                             adaptive=True,
-                                            #height=150,
-                                            #width=510,
+                                            # height=150,
+                                            # width=510,
                                             padding=15,
                                             border_radius=ft.border_radius.all(15),
                                             bgcolor=base_color,
@@ -334,6 +338,7 @@ def main(page: ft.Page):
             ),
             page.update(),
         page.update()
+
     page.update()
 
     # Funcion para volver a la vista anterior, anadimos la vista pop,
