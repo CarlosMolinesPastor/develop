@@ -159,24 +159,6 @@ def main(page: ft.Page):
         check_color=BLACK,
     )
 
-    def checkbox_cleared():
-        # Clear all checkboxes
-        for checkbox in [
-            vscode,
-            neovim,
-            zed,
-            geany,
-            sublime,
-            bluefish,
-            lapce,
-            git,
-            node,
-            mongo,
-            lazyvim,
-            homebrew,
-            docker,
-        ]:
-            checkbox.clear()
 
     def is_installed(package):
         # Return True if the specified package is installed
@@ -282,12 +264,13 @@ def main(page: ft.Page):
                     "/text_editors",
                     [
                         ft.AppBar(
-                            title=ft.Text("text_editors :)"),
+                            title=ft.Text("text_editors :)", color=WHITE),
                             bgcolor=ft.colors.RED_300,
+                            color=WHITE,
                             actions=[
                                 ft.IconButton(
-                                    ft.icons.HOME,
-                                    on_click=lambda _: page.go("/"),
+                                    ft.icons.CLEAN_HANDS,
+                                    on_click=lambda _: ft.AlertDialog(title="Alert"),
                                 )
                             ],
                         ),
@@ -351,7 +334,6 @@ def main(page: ft.Page):
             ),
             page.update(),
         page.update()
-
     page.update()
 
     # Funcion para volver a la vista anterior, anadimos la vista pop,
