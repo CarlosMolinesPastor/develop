@@ -28,7 +28,7 @@ def set_bin(path):
     """
     global __PACMAN_BIN
     if isinstance(path, str) and (
-        os.path.isfile(path) or os.path.isfile(shutil.which(path))
+        os.path.isfile(path) or os.path.isfile(shutil.which(path))  # type: ignore
     ):
         __PACMAN_BIN = shutil.which(path)
     else:
@@ -119,6 +119,36 @@ def main(page: ft.Page):
         fill_color=WHITE,
         check_color=BLACK,
     )
+    pycharm = ft.Checkbox(
+        label="pycharm",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+    )
+    intellij = ft.Checkbox(
+        label="intellij",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+    )
+    clion = ft.Checkbox(
+        label="clion",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+    )
+    rider = ft.Checkbox(
+        label="rider",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+    )
+    monodevelop = ft.Checkbox(
+        label="monodevelop",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+    )
 
     # Tecnologies
     git = ft.Checkbox(
@@ -179,6 +209,16 @@ def main(page: ft.Page):
             list_app.append("bluefish")
         if lapce.value and not is_installed("lapce"):
             list_app.append("lapce")
+        if pycharm.value and not is_installed("pycharm-community-edition"):
+            list_app.append("pycharm-community-edition")
+        if intellij.value and not is_installed("intellij-idea-community-edition"):
+            list_app.append("intellij-idea-community-edition")
+        if rider.value and not is_installed("rider"):
+            list_app.append("rider")
+        if clion.value and not is_installed("clion"):
+            list_app.append("clion")
+        if monodevelop.value and not is_installed("monodevelop-bin"):
+            list_app.append("monodevelop-bin")
         if list_app:
             # Creamos de la lista un string con los nombres de las apps
             list_editors = " ".join(list_app)
@@ -187,8 +227,8 @@ def main(page: ft.Page):
         else:
             print("Editor installed o not select")
 
-    def openTerminal(e):
-        os.system("xterm -e 'bash -c \"python3 --version; bash\" '")
+    def open_terminal(e):
+        os.system("xfce4-terminal -e 'bash -c \"python3 --version; bash\" '")
 
     My_Cmmnd = "sudo pacman -Syy && yay -S --noconfirm --needed"
     # My_Cmmnd2 = str(list_app)
@@ -304,8 +344,16 @@ def main(page: ft.Page):
                                                     ft.Column(
                                                         [
                                                             lapce,
-                                                            sublime,
-                                                            bluefish,
+                                                            pycharm,
+                                                            intellij,
+                                                        ],
+                                                        width=150,
+                                                    ),
+                                                    ft.Column(
+                                                        [
+                                                            clion,
+                                                            rider,
+                                                            monodevelop,
                                                         ],
                                                         width=150,
                                                     ),
@@ -338,6 +386,92 @@ def main(page: ft.Page):
             ),
             page.update(),
         page.update()
+        if page.route == "/tecnologies":
+            # Añadimos la vista con el AppBar y un botón para volver a la vista anterior
+            page.views.append(
+                ft.View(
+                    "/tecnologies",
+                    [
+                        ft.AppBar(
+                            title=ft.Text("tecnologies :)", color=WHITE),
+                            bgcolor=ft.colors.RED_300,
+                            color=WHITE,
+                            actions=[
+                                ft.IconButton(
+                                    ft.icons.CLEAN_HANDS,
+                                    on_click=lambda _: ft.AlertDialog(title="Alert"),
+                                )
+                            ],
+                        ),
+                        ft.Column(
+                            [
+                                ft.Row(
+                                    [
+                                        ft.Container(
+                                            ft.Row(
+                                                [
+                                                    ft.Column(
+                                                        [
+                                                            git,
+                                                            node,
+                                                            mongo,
+                                                        ],
+                                                        width=150,
+                                                    ),
+                                                    ft.Column(
+                                                        [
+                                                            geany,
+                                                            sublime,
+                                                            bluefish,
+                                                        ],
+                                                        width=150,
+                                                    ),
+                                                    ft.Column(
+                                                        [
+                                                            lapce,
+                                                            pycharm,
+                                                            intellij,
+                                                        ],
+                                                        width=150,
+                                                    ),
+                                                    ft.Column(
+                                                        [
+                                                            clion,
+                                                            rider,
+                                                            monodevelop,
+                                                        ],
+                                                        width=150,
+                                                    ),
+                                                ],
+                                                scroll=ft.ScrollMode.AUTO,
+                                            ),
+                                            expand=True,
+                                            adaptive=True,
+                                            # height=150,
+                                            # width=510,
+                                            padding=15,
+                                            border_radius=ft.border_radius.all(15),
+                                            bgcolor=base_color,
+                                        ),
+                                    ],
+                                ),
+                                ft.ElevatedButton(
+                                    "install",
+                                    bgcolor=base_color,
+                                    color=ft.colors.WHITE,
+                                    on_click=open_terminal,
+                                ),
+                            ],
+                        ),
+                    ],
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    spacing=24,
+                    padding=20,
+                )
+            ),
+            page.update(),
+        page.update()
+
 
     page.update()
 
