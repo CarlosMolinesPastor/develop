@@ -1,5 +1,6 @@
 import flet as ft
 import os
+import threading
 
 # from pyfiglet import Figlet
 import subprocess, os, shutil
@@ -75,6 +76,155 @@ def main(page: ft.Page):
     categories_color = ft.colors.BLACK87
     page.bgcolor = page_color
 
+    ## Dialogs
+
+
+    
+    ############### EDITORS ###########
+    # Dialog to install editors and close dialog
+    def close_dlg_editor_and_install(e):
+        dlg_editor.open = False
+        print("Dialog closed")
+        install_editors(e)
+        page.update()
+
+    # Dialog to close dialog
+    def close_dlg_editor(e):
+        dlg_editor.open = False
+        print("Dialog closed")
+        page.update()
+
+    # Dialog to open dialog
+    def open_dlg_editor(e):
+        page.dialog = dlg_editor
+        dlg_editor.open = True
+        print("Dialog opened")
+        page.update()
+
+    ############ TECNOLOGIES ############
+    def close_dlg_tecn_and_install(e):
+        dlg_tecn.open = False
+        print("Dialog closed")
+        install_tecnologies(e)
+        page.update()
+
+    def close_dlg_tecn(e):
+        dlg_tecn.open = False
+        print("Dialog closed")
+        page.update()
+
+    def open_dlg_tecn(e):
+        page.dialog = dlg_tecn
+        dlg_tecn.open = True
+        print("Dialog opened")
+        page.update()
+
+    ############# CREDITS #############
+    # Dialog to open credits dialog
+    def open_dlg_credits(e):
+        page.dialog = dlg_credits
+        dlg_credits.open = True
+        print("Dialog opened")
+        page.update()
+
+    def close_dlg_credits(e):
+        dlg_credits.open = False
+        print("Dialog closed")
+        page.update()
+
+    ############ REQUERIMENTS ###########
+    def close_dlg_yay(e):
+        dlg_install_yay.open = False
+        print("Dialog closed")
+        page.update()
+
+    def close_dlg_yay_install(e):
+        dlg_install_yay.open = False
+        print("Dialog closed")
+        exec_install_yay()
+        page.update()
+
+    def open_dlg_yay():
+        page.dialog = dlg_install_yay
+        dlg_install_yay.open = True
+        print("Dialog opened")
+        page.update()
+
+    ############ INSTALLED ############
+    def open_dlg_installed():
+        page.dialog = dlg_installed
+        dlg_installed.open = True
+        print("Dialog installed open")
+        page.update()
+    
+    def close_dlg_installed(e):
+        dlg_installed.open = False
+        print("Dialog installed close")
+        page.update()
+
+    # EDITORS DIALOGS
+    dlg_installed = ft.AlertDialog(
+        modal=True,
+        title=ft.Text("ERROR"),
+        content=ft.Text("Item installed or not selected"),
+        actions=[
+            ft.TextButton(text="Accept", on_click=close_dlg_installed),
+        ],
+        actions_alignment=ft.MainAxisAlignment.END,
+        on_dismiss=print("Dialog dismissed"),
+    )
+
+    
+    dlg_editor = ft.AlertDialog(
+        modal=True,
+        title=ft.Text("Please Confirm"),
+        content=ft.Text("Do you want to install the selected editors?"),
+        actions=[
+            ft.TextButton(text="Cancel", on_click=close_dlg_editor),
+            ft.TextButton(text="Install", on_click=close_dlg_editor_and_install),
+        ],
+        actions_alignment=ft.MainAxisAlignment.END,
+        on_dismiss=print("Dialog dismissed"),
+    )
+
+    dlg_tecn = ft.AlertDialog(
+        modal=True,
+        title=ft.Text("Please Confirm"),
+        content=ft.Text("Do you want to install the selected tecnologies?"),
+        actions=[
+            ft.TextButton(text="Cancel", on_click=close_dlg_tecn),
+            ft.TextButton(text="Install", on_click=close_dlg_tecn_and_install),
+        ],
+        actions_alignment=ft.MainAxisAlignment.END,
+        on_dismiss=print("Dialog dismissed"),
+    )
+
+    dlg_credits = ft.AlertDialog(
+        modal=True,
+        title=ft.Text("Credits"),
+        content=ft.Text(
+            "This applications is made with love by karlinux to learn and improve the flet and python language"
+        ),
+        actions=[
+            ft.TextButton(text="Accept", on_click=close_dlg_credits),
+        ],
+        actions_alignment=ft.MainAxisAlignment.END,
+        on_dismiss=print("Dialog dismissed"),
+    )
+
+    dlg_install_yay = ft.AlertDialog(
+        modal=True,
+        title=ft.Text("Please Confirm"),
+        content=ft.Text(
+            "You havent install yay and it is necessary for continues, Do you wat to continue with installation?"
+        ),
+        actions=[
+            ft.TextButton(text="Cancel", on_click=close_dlg_yay),
+            ft.TextButton(text="Install", on_click=close_dlg_yay_install),
+        ],
+        actions_alignment=ft.MainAxisAlignment.END,
+        on_dismiss=print("Dialog dismissed"),
+    )
     #### Checkbox ########
     # Editors
     vscode = ft.Checkbox(
@@ -149,6 +299,30 @@ def main(page: ft.Page):
         fill_color=WHITE,
         check_color=BLACK,
     )
+    androidstudio = ft.Checkbox(
+        label="android-studio",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+    )
+    gnomebuilder = ft.Checkbox(
+        label="gnome-builder",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+    )
+    gedit = ft.Checkbox(
+        label="gedit",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+    )
+    arduino_ide = ft.Checkbox(
+        label="arduino",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+    )
 
     # Tecnologies
     git = ft.Checkbox(
@@ -165,6 +339,30 @@ def main(page: ft.Page):
     )
     mongo = ft.Checkbox(
         label="mongo/compass",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+    )
+    python = ft.Checkbox(
+        label="python",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+    )
+    rust = ft.Checkbox(
+        label="rust",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+    )
+    java = ft.Checkbox(
+        label="java",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+    )
+    flutter = ft.Checkbox(
+        label="flutter",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
@@ -189,10 +387,12 @@ def main(page: ft.Page):
         check_color=BLACK,
     )
 
+    # Return True if the specified package is installed
     def is_installed(package):
         # Return True if the specified package is installed
         return pacman("-Q", package)["code"] == 0
 
+    ###### EDITORS #######
     def install_editors(e):
         list_app = []
         if vscode.value and not is_installed("visual-studio-code-bin"):
@@ -219,26 +419,67 @@ def main(page: ft.Page):
             list_app.append("clion")
         if monodevelop.value and not is_installed("monodevelop-bin"):
             list_app.append("monodevelop-bin")
+        if androidstudio.value and not is_installed("android-studio"):
+            list_app.append("android-studio")
+        if gnomebuilder.value and not is_installed("gnome-builder"):
+            list_app.append("gnome-builder")
+        if gedit.value and not is_installed("gedit"):
+            list_app.append("gedit gedit-plugins")
+        if arduino_ide.value and not is_installed("arduino-ide"):
+            list_app.append("arduino-ide")
+
         if list_app:
-            # Creamos de la lista un string con los nombres de las apps
-            list_editors = " ".join(list_app)
-            exec_install_editors(list_editors)
+            # make a string with the list of editors
+            list_editors = " ".join(list_app)  # .replace(" ", "")
+            exec_install_editors(
+                list_editors
+            )  # call the function to install the editors
             print(list_editors)
         else:
-            print("Editor installed o not select")
+            open_dlg_installed()
+            print(
+                "Editor installed o not select"
+            )  # if the list is empty print the message
+
+    ######### TECNOLOGIES ##########
+    def install_tecnologies(e):
+        list_app = []
+        if git.value and is_installed("git"):
+            list_app.append("git")
+        if node.value and not is_installed("node"):
+            list_app.append("node npm")
+        if mongo.value and not is_installed("mongodb-bin"):
+            list_app.append("mongodb-bin mongosh-bin mongodb-tools mongodb-compass")
+        if python.value and not is_installed("python"):
+            list_app.append("python")
+        if rust.value and not is_installed("rust"):
+            list_app.append("rust")
+        if java.value and not is_installed("jdk-openjdk"):
+            list_app.append("jdk-openjdk")
+        if flutter.value and not is_installed("flutter-bin"):
+            list_app.append("flutter-bin")
+
+        if list_app:
+            list_tecn = " ".join(list_app)
+            exec_install_tecn(list_tecn)
+        else:
+            open_dlg_installed()
+            print("Tecnologies installed or not selected")
 
     def open_terminal(e):
         os.system("xfce4-terminal -e 'bash -c \"python3 --version; bash\" '")
 
-    My_Cmmnd = "sudo pacman -Syy && yay -S --noconfirm --needed"
-    # My_Cmmnd2 = str(list_app)
-
+    install_command= "sudo pacman -Syy && yay -S --noconfirm --needed"
+    install_yay = "sudo pacman -S --noconfirm --needed base-devel git && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm"
+    add_user_flutter = "sudo usermod -a -G flutter $USER && echo $USER"
+    
+    
     def exec_install_editors(list_editors):
         if list_editors:
             process = (
                 subprocess.Popen(
                     "xfce4-terminal -e 'bash -c \""
-                    + My_Cmmnd
+                    + install_command
                     + " "
                     + list_editors
                     + ";bash\"' ",
@@ -250,14 +491,63 @@ def main(page: ft.Page):
         else:
             print("Editors installed or not selected")
 
+    def exec_install_tecn(list_tecn):
+        simple_command = (
+            "xfce4-terminal -e 'bash -c \"" + install_command + " " + list_tecn + ";bash\"' "
+        )
+        flutter_command = (
+            "xfce4-terminal -e 'bash -c \""
+            + install_command
+            + " "
+            + list_tecn
+            + " && "
+            + add_user_flutter
+            + " added to flutter group"
+            + ";bash\"' "
+        )
+        if not list_tecn:
+            print("Not list")
+        else:
+            if list_tecn and "flutter-bin" in list_tecn:
+                process = (
+                    subprocess.Popen(
+                        flutter_command,
+                        stdout=subprocess.PIPE,
+                        stderr=None,
+                        shell=True,
+                    ),
+                )
+            else:
+                process = (
+                    subprocess.Popen(
+                        simple_command,
+                        stdout=subprocess.PIPE,
+                        stderr=None,
+                        shell=True,
+                    ),
+                )
+            print("Tecnologies installed or not selected")
+
+    def compr_yay():
+        print("Compr se esta ejecutando")
+        if not is_installed("yay"):
+            print("yay is not installed")
+            open_dlg_yay()
+        else:
+            print("Yay installed")
+
+    def exec_install_yay():
+        os.system("xfce4-terminal -e 'bash -c \"" + install_yay + "; bash\" '")
+
+
     # ####### ROUTE CHANGE ########
     def route_change(route):
-
         # Borramos las vistas si hubiera alguna
         page.views.clear()
         page.theme = ft.Theme(color_scheme=ft.ColorScheme(primary=ft.colors.RED_300))
 
-        # #######  HOME ########
+        threading.Timer(2.0, compr_yay).start()
+        ########  HOME ########
         # Anadimos la vista principal con la ruta slash y añadimos los controles de la pagina: un appbar
         # y dos botones elevados, uno para añadir productos y otro para buscar por fecha
         page.views.append(
@@ -294,6 +584,14 @@ def main(page: ft.Page):
                         width=350,
                         on_click=lambda _: page.go("/others"),
                     ),
+                    ft.ElevatedButton(
+                        "others",
+                        bgcolor=ft.colors.RED_300,
+                        color=ft.colors.WHITE,
+                        height=60,
+                        width=350,
+                        on_click=open_dlg_yay,
+                    ),
                 ],
                 # Alineamos los controles en el centro de la pagina
                 vertical_alignment=ft.MainAxisAlignment.CENTER,
@@ -301,20 +599,21 @@ def main(page: ft.Page):
                 spacing=24,
             )
         )
+
         if page.route == "/text_editors":
             # Añadimos la vista con el AppBar y un botón para volver a la vista anterior
             page.views.append(
                 ft.View(
                     "/text_editors",
-                    [
+                    [  # type: ignore
                         ft.AppBar(
                             title=ft.Text("text_editors :)", color=WHITE),
                             bgcolor=ft.colors.RED_300,
                             color=WHITE,
-                            actions=[
+                            actions=[  # type: ignore
                                 ft.IconButton(
-                                    ft.icons.CLEAN_HANDS,
-                                    on_click=lambda _: ft.AlertDialog(title="Alert"),
+                                    ft.icons.QUESTION_ANSWER,
+                                    on_click=open_dlg_credits,
                                 )
                             ],
                         ),
@@ -330,28 +629,40 @@ def main(page: ft.Page):
                                                             vscode,
                                                             neovim,
                                                             zed,
+                                                            geany,
                                                         ],
                                                         width=150,
                                                     ),
                                                     ft.Column(
                                                         [
-                                                            geany,
                                                             sublime,
                                                             bluefish,
-                                                        ],
-                                                        width=150,
-                                                    ),
-                                                    ft.Column(
-                                                        [
                                                             lapce,
-                                                            pycharm,
-                                                            intellij,
+                                                            monodevelop,
                                                         ],
                                                         width=150,
                                                     ),
                                                     ft.Column(
                                                         [
+                                                            intellij,
                                                             clion,
+                                                            rider,
+                                                            pycharm,
+                                                        ],
+                                                        width=150,
+                                                    ),
+                                                    ft.Column(
+                                                        [
+                                                            androidstudio,
+                                                            gnomebuilder,
+                                                            gedit,
+                                                            arduino_ide,
+                                                        ],
+                                                        width=150,
+                                                    ),
+                                                    ft.Column(
+                                                        [
+                                                            androidstudio,
                                                             rider,
                                                             monodevelop,
                                                         ],
@@ -374,7 +685,7 @@ def main(page: ft.Page):
                                     "install",
                                     bgcolor=base_color,
                                     color=ft.colors.WHITE,
-                                    on_click=install_editors,
+                                    on_click=open_dlg_editor,
                                 ),
                             ],
                         ),
@@ -384,22 +695,21 @@ def main(page: ft.Page):
                     padding=20,
                 )
             ),
-            page.update(),
         page.update()
         if page.route == "/tecnologies":
             # Añadimos la vista con el AppBar y un botón para volver a la vista anterior
             page.views.append(
                 ft.View(
                     "/tecnologies",
-                    [
+                    [  # type: ignore
                         ft.AppBar(
                             title=ft.Text("tecnologies :)", color=WHITE),
                             bgcolor=ft.colors.RED_300,
                             color=WHITE,
-                            actions=[
+                            actions=[  # type: ignore
                                 ft.IconButton(
-                                    ft.icons.CLEAN_HANDS,
-                                    on_click=lambda _: ft.AlertDialog(title="Alert"),
+                                    ft.icons.QUESTION_ANSWER,
+                                    on_click=open_dlg_credits,
                                 )
                             ],
                         ),
@@ -415,20 +725,22 @@ def main(page: ft.Page):
                                                             git,
                                                             node,
                                                             mongo,
+                                                            python,
                                                         ],
                                                         width=150,
                                                     ),
                                                     ft.Column(
                                                         [
-                                                            geany,
-                                                            sublime,
-                                                            bluefish,
+                                                            rust,
+                                                            java,
+                                                            flutter,
+                                                            clion,
                                                         ],
                                                         width=150,
                                                     ),
                                                     ft.Column(
                                                         [
-                                                            lapce,
+                                                            flutter,
                                                             pycharm,
                                                             intellij,
                                                         ],
@@ -459,7 +771,7 @@ def main(page: ft.Page):
                                     "install",
                                     bgcolor=base_color,
                                     color=ft.colors.WHITE,
-                                    on_click=open_terminal,
+                                    on_click=open_dlg_tecn,
                                 ),
                             ],
                         ),
@@ -469,9 +781,7 @@ def main(page: ft.Page):
                     padding=20,
                 )
             ),
-            page.update(),
         page.update()
-
 
     page.update()
 
