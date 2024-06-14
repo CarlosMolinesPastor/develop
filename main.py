@@ -7,6 +7,7 @@ import subprocess, os, shutil
 from urllib import request
 from shlex import quote
 
+from flet_core.border_radius import horizontal
 from flet_core.colors import BLACK, WHITE
 
 ######### PACMAN LIBRARIES ######
@@ -76,10 +77,14 @@ def main(page: ft.Page):
     categories_color = ft.colors.BLACK87
     page.bgcolor = page_color
 
-    ## Dialogs
+    img = ft.Image(
+        src=f"./images/logo_develop.png",
+        width=200,
+        height=200,
+        fit=ft.ImageFit.CONTAIN,
+    )
 
-
-    
+    #### Dialogs ####
     ############### EDITORS ###########
     # Dialog to install editors and close dialog
     def close_dlg_editor_and_install(e):
@@ -156,7 +161,7 @@ def main(page: ft.Page):
         dlg_installed.open = True
         print("Dialog installed open")
         page.update()
-    
+
     def close_dlg_installed(e):
         dlg_installed.open = False
         print("Dialog installed close")
@@ -174,7 +179,6 @@ def main(page: ft.Page):
         on_dismiss=print("Dialog dismissed"),
     )
 
-    
     dlg_editor = ft.AlertDialog(
         modal=True,
         title=ft.Text("Please Confirm"),
@@ -201,9 +205,27 @@ def main(page: ft.Page):
 
     dlg_credits = ft.AlertDialog(
         modal=True,
-        title=ft.Text("Credits"),
-        content=ft.Text(
-            "This applications is made with love by karlinux to learn and improve the flet and python language"
+        title=ft.Text(
+            "Credits",
+            color=base_color,
+        ),
+        content=ft.Column(
+            [
+                img,
+                ft.Text(
+                    "This applications is made with love by karlinux to learn and improve the flet and python language",
+                    color=base_color,
+                ),
+                ft.Text(
+                    "If you want to contribute to the project, you can do it through the following link:",
+                    color=base_color,
+                ),
+                ft.TextButton(
+                    text="https://github.com/CarlosMolinesPastor/develop",
+                    on_click=print("https://github.com/CarlosMolinesPastor/develop"),
+                ),
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         ),
         actions=[
             ft.TextButton(text="Accept", on_click=close_dlg_credits),
@@ -469,11 +491,10 @@ def main(page: ft.Page):
     def open_terminal(e):
         os.system("xfce4-terminal -e 'bash -c \"python3 --version; bash\" '")
 
-    install_command= "sudo pacman -Syy && yay -S --noconfirm --needed"
+    install_command = "sudo pacman -Syy && yay -S --noconfirm --needed"
     install_yay = "sudo pacman -S --noconfirm --needed base-devel git && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm"
     add_user_flutter = "sudo usermod -a -G flutter $USER && echo $USER"
-    
-    
+
     def exec_install_editors(list_editors):
         if list_editors:
             process = (
@@ -493,7 +514,11 @@ def main(page: ft.Page):
 
     def exec_install_tecn(list_tecn):
         simple_command = (
-            "xfce4-terminal -e 'bash -c \"" + install_command + " " + list_tecn + ";bash\"' "
+            "xfce4-terminal -e 'bash -c \""
+            + install_command
+            + " "
+            + list_tecn
+            + ";bash\"' "
         )
         flutter_command = (
             "xfce4-terminal -e 'bash -c \""
@@ -539,7 +564,6 @@ def main(page: ft.Page):
     def exec_install_yay():
         os.system("xfce4-terminal -e 'bash -c \"" + install_yay + "; bash\" '")
 
-
     # ####### ROUTE CHANGE ########
     def route_change(route):
         # Borramos las vistas si hubiera alguna
@@ -560,6 +584,7 @@ def main(page: ft.Page):
                         title=ft.Text("arch_develop :)", color=WHITE),
                         bgcolor=ft.colors.RED_300,
                     ),
+                    img,
                     ft.ElevatedButton(
                         "text editors",
                         bgcolor=ft.colors.RED_300,
@@ -597,190 +622,195 @@ def main(page: ft.Page):
                 vertical_alignment=ft.MainAxisAlignment.CENTER,
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 spacing=24,
+                padding=20,
             )
         )
 
         if page.route == "/text_editors":
             # Añadimos la vista con el AppBar y un botón para volver a la vista anterior
-            page.views.append(
-                ft.View(
-                    "/text_editors",
-                    [  # type: ignore
-                        ft.AppBar(
-                            title=ft.Text("text_editors :)", color=WHITE),
-                            bgcolor=ft.colors.RED_300,
-                            color=WHITE,
-                            actions=[  # type: ignore
-                                ft.IconButton(
-                                    ft.icons.QUESTION_ANSWER,
-                                    on_click=open_dlg_credits,
-                                )
-                            ],
-                        ),
-                        ft.Column(
-                            [
-                                ft.Row(
-                                    [
-                                        ft.Container(
-                                            ft.Row(
-                                                [
-                                                    ft.Column(
-                                                        [
-                                                            vscode,
-                                                            neovim,
-                                                            zed,
-                                                            geany,
-                                                        ],
-                                                        width=150,
-                                                    ),
-                                                    ft.Column(
-                                                        [
-                                                            sublime,
-                                                            bluefish,
-                                                            lapce,
-                                                            monodevelop,
-                                                        ],
-                                                        width=150,
-                                                    ),
-                                                    ft.Column(
-                                                        [
-                                                            intellij,
-                                                            clion,
-                                                            rider,
-                                                            pycharm,
-                                                        ],
-                                                        width=150,
-                                                    ),
-                                                    ft.Column(
-                                                        [
-                                                            androidstudio,
-                                                            gnomebuilder,
-                                                            gedit,
-                                                            arduino_ide,
-                                                        ],
-                                                        width=150,
-                                                    ),
-                                                    ft.Column(
-                                                        [
-                                                            androidstudio,
-                                                            rider,
-                                                            monodevelop,
-                                                        ],
-                                                        width=150,
-                                                    ),
-                                                ],
-                                                scroll=ft.ScrollMode.AUTO,
+            (
+                page.views.append(
+                    ft.View(
+                        "/text_editors",
+                        [  # type: ignore
+                            ft.AppBar(
+                                title=ft.Text("text_editors :)", color=WHITE),
+                                bgcolor=ft.colors.RED_300,
+                                color=WHITE,
+                                actions=[  # type: ignore
+                                    ft.IconButton(
+                                        ft.icons.QUESTION_ANSWER,
+                                        on_click=open_dlg_credits,
+                                    )
+                                ],
+                            ),
+                            ft.Column(
+                                [
+                                    ft.Row(
+                                        [
+                                            ft.Container(
+                                                ft.Row(
+                                                    [
+                                                        ft.Column(
+                                                            [
+                                                                vscode,
+                                                                neovim,
+                                                                zed,
+                                                                geany,
+                                                            ],
+                                                            width=150,
+                                                        ),
+                                                        ft.Column(
+                                                            [
+                                                                sublime,
+                                                                bluefish,
+                                                                lapce,
+                                                                monodevelop,
+                                                            ],
+                                                            width=150,
+                                                        ),
+                                                        ft.Column(
+                                                            [
+                                                                intellij,
+                                                                clion,
+                                                                rider,
+                                                                pycharm,
+                                                            ],
+                                                            width=150,
+                                                        ),
+                                                        ft.Column(
+                                                            [
+                                                                androidstudio,
+                                                                gnomebuilder,
+                                                                gedit,
+                                                                arduino_ide,
+                                                            ],
+                                                            width=150,
+                                                        ),
+                                                        ft.Column(
+                                                            [
+                                                                androidstudio,
+                                                                rider,
+                                                                monodevelop,
+                                                            ],
+                                                            width=150,
+                                                        ),
+                                                    ],
+                                                    scroll=ft.ScrollMode.AUTO,
+                                                ),
+                                                expand=True,
+                                                adaptive=True,
+                                                # height=150,
+                                                # width=510,
+                                                padding=15,
+                                                border_radius=ft.border_radius.all(15),
+                                                bgcolor=base_color,
                                             ),
-                                            expand=True,
-                                            adaptive=True,
-                                            # height=150,
-                                            # width=510,
-                                            padding=15,
-                                            border_radius=ft.border_radius.all(15),
-                                            bgcolor=base_color,
-                                        ),
-                                    ],
-                                ),
-                                ft.ElevatedButton(
-                                    "install",
-                                    bgcolor=base_color,
-                                    color=ft.colors.WHITE,
-                                    on_click=open_dlg_editor,
-                                ),
-                            ],
-                        ),
-                    ],
-                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                    spacing=24,
-                    padding=20,
-                )
-            ),
+                                        ],
+                                    ),
+                                    ft.ElevatedButton(
+                                        "install",
+                                        bgcolor=base_color,
+                                        color=ft.colors.WHITE,
+                                        on_click=open_dlg_editor,
+                                    ),
+                                ],
+                            ),
+                        ],
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        spacing=24,
+                        padding=20,
+                    )
+                ),
+            )
         page.update()
         if page.route == "/tecnologies":
             # Añadimos la vista con el AppBar y un botón para volver a la vista anterior
-            page.views.append(
-                ft.View(
-                    "/tecnologies",
-                    [  # type: ignore
-                        ft.AppBar(
-                            title=ft.Text("tecnologies :)", color=WHITE),
-                            bgcolor=ft.colors.RED_300,
-                            color=WHITE,
-                            actions=[  # type: ignore
-                                ft.IconButton(
-                                    ft.icons.QUESTION_ANSWER,
-                                    on_click=open_dlg_credits,
-                                )
-                            ],
-                        ),
-                        ft.Column(
-                            [
-                                ft.Row(
-                                    [
-                                        ft.Container(
-                                            ft.Row(
-                                                [
-                                                    ft.Column(
-                                                        [
-                                                            git,
-                                                            node,
-                                                            mongo,
-                                                            python,
-                                                        ],
-                                                        width=150,
-                                                    ),
-                                                    ft.Column(
-                                                        [
-                                                            rust,
-                                                            java,
-                                                            flutter,
-                                                            clion,
-                                                        ],
-                                                        width=150,
-                                                    ),
-                                                    ft.Column(
-                                                        [
-                                                            flutter,
-                                                            pycharm,
-                                                            intellij,
-                                                        ],
-                                                        width=150,
-                                                    ),
-                                                    ft.Column(
-                                                        [
-                                                            clion,
-                                                            rider,
-                                                            monodevelop,
-                                                        ],
-                                                        width=150,
-                                                    ),
-                                                ],
-                                                scroll=ft.ScrollMode.AUTO,
+            (
+                page.views.append(
+                    ft.View(
+                        "/tecnologies",
+                        [  # type: ignore
+                            ft.AppBar(
+                                title=ft.Text("tecnologies :)", color=WHITE),
+                                bgcolor=ft.colors.RED_300,
+                                color=WHITE,
+                                actions=[  # type: ignore
+                                    ft.IconButton(
+                                        ft.icons.QUESTION_ANSWER,
+                                        on_click=open_dlg_credits,
+                                    )
+                                ],
+                            ),
+                            ft.Column(
+                                [
+                                    ft.Row(
+                                        [
+                                            ft.Container(
+                                                ft.Row(
+                                                    [
+                                                        ft.Column(
+                                                            [
+                                                                git,
+                                                                node,
+                                                                mongo,
+                                                                python,
+                                                            ],
+                                                            width=150,
+                                                        ),
+                                                        ft.Column(
+                                                            [
+                                                                rust,
+                                                                java,
+                                                                flutter,
+                                                                clion,
+                                                            ],
+                                                            width=150,
+                                                        ),
+                                                        ft.Column(
+                                                            [
+                                                                flutter,
+                                                                pycharm,
+                                                                intellij,
+                                                            ],
+                                                            width=150,
+                                                        ),
+                                                        ft.Column(
+                                                            [
+                                                                clion,
+                                                                rider,
+                                                                monodevelop,
+                                                            ],
+                                                            width=150,
+                                                        ),
+                                                    ],
+                                                    scroll=ft.ScrollMode.AUTO,
+                                                ),
+                                                expand=True,
+                                                adaptive=True,
+                                                # height=150,
+                                                # width=510,
+                                                padding=15,
+                                                border_radius=ft.border_radius.all(15),
+                                                bgcolor=base_color,
                                             ),
-                                            expand=True,
-                                            adaptive=True,
-                                            # height=150,
-                                            # width=510,
-                                            padding=15,
-                                            border_radius=ft.border_radius.all(15),
-                                            bgcolor=base_color,
-                                        ),
-                                    ],
-                                ),
-                                ft.ElevatedButton(
-                                    "install",
-                                    bgcolor=base_color,
-                                    color=ft.colors.WHITE,
-                                    on_click=open_dlg_tecn,
-                                ),
-                            ],
-                        ),
-                    ],
-                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                    spacing=24,
-                    padding=20,
-                )
-            ),
+                                        ],
+                                    ),
+                                    ft.ElevatedButton(
+                                        "install",
+                                        bgcolor=base_color,
+                                        color=ft.colors.WHITE,
+                                        on_click=open_dlg_tecn,
+                                    ),
+                                ],
+                            ),
+                        ],
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        spacing=24,
+                        padding=20,
+                    )
+                ),
+            )
         page.update()
 
     page.update()
