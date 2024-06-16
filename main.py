@@ -15,17 +15,13 @@ __PACMAN_BIN = shutil.which("pacman")  # default to use the system's pacman bina
 
 
 def get_bin():
-    """
-    Return the current pacman binary being used.
-    """
+    # Return the current pacman binary being used.
     return __PACMAN_BIN
 
 
 def set_bin(path):
-    """
-    Set a custom pacman binary.
-    If the pacman binary is set to an AUR helper, this module may also be used to interact with AUR.
-    """
+    # Set a custom pacman binary.
+    # If the pacman binary is set to an AUR helper, this module may also be used to interact with AUR.
     global __PACMAN_BIN
     if isinstance(path, str) and (
         os.path.isfile(path) or os.path.isfile(shutil.which(path))  # type: ignore
@@ -36,7 +32,7 @@ def set_bin(path):
 
 
 def pacman(flags, pkgs=[], eflgs=[], pacman_bin=__PACMAN_BIN):
-    """Subprocess wrapper, get all data"""
+    # Subprocess wrapper, get all data"""
     if not pkgs:
         cmd = [pacman_bin, "--noconfirm", flags]
     elif type(pkgs) == list:
@@ -75,12 +71,15 @@ def main(page: ft.Page):
     categories_color = ft.colors.BLACK87
     page.bgcolor = page_color
 
+    # Image
     img = ft.Image(
         src=f"./images/logo_develop.png",
         width=200,
         height=200,
         fit=ft.ImageFit.CONTAIN,
     )
+
+    # Logo
     img_l = ft.Image(
         src=f"./images/logo_develop.png",
         width=150,
@@ -88,8 +87,10 @@ def main(page: ft.Page):
         fit=ft.ImageFit.CONTAIN,
     )
 
-    #### Dialogs ####
-    ############### EDITORS ###########
+    ################ Dialogs ###############
+
+    ####### EDITORS #######
+
     # Dialog to install editors and close dialog
     def close_dlg_editor_and_install(e):
         dlg_editor.open = False
@@ -110,7 +111,8 @@ def main(page: ft.Page):
         print("Dialog opened")
         page.update()
 
-    ############ TECNOLOGIES ############
+    ####### TECNOLOGIES ########
+
     def close_dlg_tecn_and_install(e):
         dlg_tecn.open = False
         print("Dialog closed")
@@ -128,7 +130,8 @@ def main(page: ft.Page):
         print("Dialog opened")
         page.update()
 
-    ############ OTHERS ############
+    ######## OTHERS ########
+
     def close_dlg_other_and_install(e):
         dlg_other.open = False
         print("Dialog closed")
@@ -146,7 +149,8 @@ def main(page: ft.Page):
         print("Dialog opened")
         page.update()
 
-    ############# CREDITS #############
+    ######## CREDITS ########
+
     # Dialog to open credits dialog
     def open_dlg_credits(e):
         page.dialog = dlg_credits
@@ -159,7 +163,8 @@ def main(page: ft.Page):
         print("Dialog closed")
         page.update()
 
-    ############ REQUERIMENTS ###########
+    ######## REQUERIMENTS #######
+
     def close_dlg_yay(e):
         dlg_install_yay.open = False
         print("Dialog closed")
@@ -177,7 +182,8 @@ def main(page: ft.Page):
         print("Dialog opened")
         page.update()
 
-    ############ INSTALLED ############
+    ####### INSTALLED #######
+
     def open_dlg_installed():
         page.dialog = dlg_installed
         dlg_installed.open = True
@@ -189,7 +195,8 @@ def main(page: ft.Page):
         print("Dialog installed close")
         page.update()
 
-    # EDITORS DIALOGS
+    ####### EDITORS DIALOGS #######
+
     dlg_installed = ft.AlertDialog(
         modal=True,
         title=ft.Text("ALERT"),
@@ -284,7 +291,9 @@ def main(page: ft.Page):
         actions_alignment=ft.MainAxisAlignment.END,
         on_dismiss=print("Dialog dismissed"),
     )
-    #### Checkbox ########
+
+    ################## CHECKBOX ##################
+
     # Universal
     blank = ft.Checkbox(
         label="blank",
@@ -292,6 +301,7 @@ def main(page: ft.Page):
         fill_color=WHITE,
         check_color=BLACK,
     )
+
     # Editors
     vscode = ft.Checkbox(
         label="vscode",
@@ -515,6 +525,8 @@ def main(page: ft.Page):
         tooltip="Homebrew is a package manager for macOS and Linux too",
     )
 
+    ################# FUNCTIONS ##################
+
     # Return True if the specified package is installed
     def is_installed(package):
         # Return True if the specified package is installed
@@ -571,7 +583,7 @@ def main(page: ft.Page):
                 "Editor installed o not select"
             )  # if the list is empty print the message
 
-    ######### TECNOLOGIES ##########
+    ###### TECNOLOGIES #######
     def install_tecnologies(e):
         list_app = []
         if git.value and is_installed("git"):
@@ -606,6 +618,7 @@ def main(page: ft.Page):
             open_dlg_installed()
             print("Tecnologies installed or not selected")
 
+    ###### OTHERS #######
     def install_other(e):
         list_app = []
         if lazyvim.value:
@@ -622,12 +635,14 @@ def main(page: ft.Page):
     def open_terminal(e):
         os.system("xfce4-terminal -e 'bash -c \"python3 --version; bash\" '")
 
+    ####### COMMANDS ########
     install_command = "sudo pacman -Syy && yay -S --noconfirm --needed"
     install_yay = "sudo pacman -S --noconfirm --needed base-devel git && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm"
     add_user_flutter = "sudo usermod -a -G flutter $USER && echo $USER"
     add_user_docker = "sudo usermod -a -G docker $USER && echo $USER"
     lazyvim_command = "mv ~/.config/nvim{,.bak} && mv ~/.local/share/nvim{,.bak} && mv ~/.local/state/nvim{,.bak} && mv ~/.cache/nvim{,.bak} && git clone https://github.com/LazyVim/starter ~/.config/nvim && rm -rf ~/.config/nvim/.git"
 
+    ######## INSTALL FUNCIONS ########
     def exec_install_editors(list_editors):
         if list_editors:
             process = (
@@ -751,7 +766,9 @@ def main(page: ft.Page):
     def exec_install_yay():
         os.system("xfce4-terminal -e 'bash -c \"" + install_yay + "; bash\" '")
 
-    # ####### ROUTE CHANGE ########
+    ############## ROUTE CHANGE ###############
+
+    ###### PRINCIPAL ######
     def route_change(route):
         # Borramos las vistas si hubiera alguna
         page.views.clear()
@@ -816,6 +833,7 @@ def main(page: ft.Page):
             )
         )
 
+        ######## EDITORS ########
         if page.route == "/text_editors":
             # Añadimos la vista con el AppBar y un botón para volver a la vista anterior
             (
@@ -916,6 +934,7 @@ def main(page: ft.Page):
             )
         page.update()
 
+        ######## TECNOLOGIES ########
         if page.route == "/tecnologies":
             # Añadimos la vista con el AppBar y un botón para volver a la vista anterior
             (
@@ -1033,6 +1052,7 @@ def main(page: ft.Page):
             )
         page.update()
 
+        ######## OTHERS ########
         if page.route == "/others":
             # Añadimos la vista con el AppBar y un botón para volver a la vista anterior
             (
