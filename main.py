@@ -1,17 +1,12 @@
-from webbrowser import open_new
 import flet as ft
 import os
 import threading
 
 # from pyfiglet import Figlet
 import subprocess, os, shutil
-from urllib import request
 from shlex import quote
 
-from flet_core import tooltip
-from flet_core.border_radius import horizontal
 from flet_core.colors import BLACK, WHITE
-from flet_runtime.utils import webbrowser
 
 ######### PACMAN LIBRARIES ######
 # Thanks https://github.com/peakwinter/python-pacman/tree/master
@@ -133,6 +128,24 @@ def main(page: ft.Page):
         print("Dialog opened")
         page.update()
 
+    ############ OTHERS ############
+    def close_dlg_other_and_install(e):
+        dlg_other.open = False
+        print("Dialog closed")
+        install_other(e)
+        page.update()
+
+    def close_dlg_other(e):
+        dlg_other.open = False
+        print("Dialog closed")
+        page.update()
+
+    def open_dlg_other(e):
+        page.dialog = dlg_other
+        dlg_other.open = True
+        print("Dialog opened")
+        page.update()
+
     ############# CREDITS #############
     # Dialog to open credits dialog
     def open_dlg_credits(e):
@@ -207,6 +220,18 @@ def main(page: ft.Page):
         actions=[
             ft.TextButton(text="Cancel", on_click=close_dlg_tecn),
             ft.TextButton(text="Install", on_click=close_dlg_tecn_and_install),
+        ],
+        actions_alignment=ft.MainAxisAlignment.END,
+        on_dismiss=print("Dialog dismissed"),
+    )
+
+    dlg_other = ft.AlertDialog(
+        modal=True,
+        title=ft.Text("Please Confirm"),
+        content=ft.Text("Do you want to install the selected items?"),
+        actions=[
+            ft.TextButton(text="Cancel", on_click=close_dlg_other),
+            ft.TextButton(text="Install", on_click=close_dlg_other_and_install),
         ],
         actions_alignment=ft.MainAxisAlignment.END,
         on_dismiss=print("Dialog dismissed"),
@@ -482,8 +507,8 @@ def main(page: ft.Page):
         check_color=BLACK,
         tooltip="LazyVim is a simple and easy-to-use text editor that is designed to be fast and lightweight",
     )
-    homebrew = ft.Checkbox(
-        label="homebrew",
+    nvchad = ft.Checkbox(
+        label="nvchad",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
@@ -581,6 +606,19 @@ def main(page: ft.Page):
             open_dlg_installed()
             print("Tecnologies installed or not selected")
 
+    def install_other(e):
+        list_app = []
+        if lazyvim.value:
+            list_app.append("lazyvim")
+        if nvchad.value:
+            list_app.append("nvchad")
+        if list_app:
+            list_others = " ".join(list_app)
+            exec_install_others(list_others)
+        else:
+            open_dlg_installed()
+            print("Others installed or not selected")
+
     def open_terminal(e):
         os.system("xfce4-terminal -e 'bash -c \"python3 --version; bash\" '")
 
@@ -670,6 +708,32 @@ def main(page: ft.Page):
                 process = (
                     subprocess.Popen(
                         simple_command,
+                        stdout=subprocess.PIPE,
+                        stderr=None,
+                        shell=True,
+                    ),
+                )
+
+    def exec_install_others(list_others):
+        if not list_others:
+            print("Not list")
+        else:
+
+            if "lazyvim" in list_others:
+                process = (
+                    subprocess.Popen(
+                        "xfce4-terminal -e 'bash -c \"" + lazyvim_command + ";bash\"' ",
+                        stdout=subprocess.PIPE,
+                        stderr=None,
+                        shell=True,
+                    ),
+                )
+            if "nvchad" in list_others:
+                process = (
+                    subprocess.Popen(
+                        "xfce4-terminal -e 'bash -c \""
+                        + install_command
+                        + " nvchad-git;bash\"' ",
                         stdout=subprocess.PIPE,
                         stderr=None,
                         shell=True,
@@ -997,7 +1061,7 @@ def main(page: ft.Page):
                                                         ft.Column(
                                                             [
                                                                 lazyvim,
-                                                                homebrew,
+                                                                nvchad,
                                                                 blank,
                                                                 blank,
                                                             ],
@@ -1045,7 +1109,7 @@ def main(page: ft.Page):
                                         "install",
                                         bgcolor=base_color,
                                         color=ft.colors.WHITE,
-                                        on_click=lambda _: page.go("/others"),
+                                        on_click=open_dlg_other,
                                     ),
                                 ],
                             ),
