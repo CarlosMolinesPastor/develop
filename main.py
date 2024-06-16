@@ -1,3 +1,4 @@
+from webbrowser import open_new
 import flet as ft
 import os
 import threading
@@ -7,8 +8,10 @@ import subprocess, os, shutil
 from urllib import request
 from shlex import quote
 
+from flet_core import tooltip
 from flet_core.border_radius import horizontal
 from flet_core.colors import BLACK, WHITE
+from flet_runtime.utils import webbrowser
 
 ######### PACMAN LIBRARIES ######
 # Thanks https://github.com/peakwinter/python-pacman/tree/master
@@ -81,6 +84,12 @@ def main(page: ft.Page):
         src=f"./images/logo_develop.png",
         width=200,
         height=200,
+        fit=ft.ImageFit.CONTAIN,
+    )
+    img_l = ft.Image(
+        src=f"./images/logo_develop.png",
+        width=150,
+        height=150,
         fit=ft.ImageFit.CONTAIN,
     )
 
@@ -170,7 +179,7 @@ def main(page: ft.Page):
     # EDITORS DIALOGS
     dlg_installed = ft.AlertDialog(
         modal=True,
-        title=ft.Text("ERROR"),
+        title=ft.Text("ALERT"),
         content=ft.Text("Item installed or not selected"),
         actions=[
             ft.TextButton(text="Accept", on_click=close_dlg_installed),
@@ -203,6 +212,9 @@ def main(page: ft.Page):
         on_dismiss=print("Dialog dismissed"),
     )
 
+    def open_github(e):
+        page.launch_url("https://github.com/CarlosMolinesPastor/develop")
+
     dlg_credits = ft.AlertDialog(
         modal=True,
         title=ft.Text(
@@ -211,18 +223,18 @@ def main(page: ft.Page):
         ),
         content=ft.Column(
             [
-                img,
+                img_l,
                 ft.Text(
                     "This applications is made with love by karlinux to learn and improve the flet and python language",
                     color=base_color,
                 ),
                 ft.Text(
-                    "If you want to contribute to the project, you can do it through the following link:",
+                    "The project is open source and you can contribute to it through the following link:",
                     color=base_color,
                 ),
                 ft.TextButton(
                     text="https://github.com/CarlosMolinesPastor/develop",
-                    on_click=print("https://github.com/CarlosMolinesPastor/develop"),
+                    on_click=open_github,
                 ),
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -248,102 +260,132 @@ def main(page: ft.Page):
         on_dismiss=print("Dialog dismissed"),
     )
     #### Checkbox ########
+    # Universal
+    blank = ft.Checkbox(
+        label="blank",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+    )
     # Editors
     vscode = ft.Checkbox(
         label="vscode",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="Multiplatform code editor for Microsoft",
     )
     neovim = ft.Checkbox(
         label="neovim",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="Vim-fork focused on extensibility and usability",
     )
     zed = ft.Checkbox(
         label="zed",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="Zed is a fully offline-capable, open-source text and code editor for power users",
     )
     geany = ft.Checkbox(
         label="geany",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="Geany is a small and lightweight Integrated Development Environment",
     )
     sublime = ft.Checkbox(
         label="sublime text4",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="Sublime Text is a sophisticated text editor for code, markup, and prose",
     )
     bluefish = ft.Checkbox(
         label="bluefish",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="Bluefish is a powerful editor for experienced web designers and programmers",
     )
     lapce = ft.Checkbox(
         label="lapce",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="Lapce is a code editor Multiplatform with a focus on performance and ease of use",
     )
     pycharm = ft.Checkbox(
         label="pycharm",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="PyCharm is the best IDE I've ever used. With PyCharm, you can work with Python, Django, and other frameworks",
     )
     intellij = ft.Checkbox(
         label="intellij",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="IntelliJ IDEA is a powerful Java integrated development environment (IDE) for developing computer software",
     )
     clion = ft.Checkbox(
         label="clion",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="CLion is a cross-platform IDE for C and C++",
     )
     rider = ft.Checkbox(
         label="rider",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="Rider is a cross-platform .NET IDE based on the IntelliJ platform and ReSharper",
     )
     monodevelop = ft.Checkbox(
         label="monodevelop",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="MonoDevelop is a cross-platform IDE primarily designed for C# and other .NET languages",
     )
     androidstudio = ft.Checkbox(
         label="android-studio",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="Android Studio is the official integrated development environment for Google's Android operating system",
     )
     gnomebuilder = ft.Checkbox(
         label="gnome-builder",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="GNOME Builder is an open-source IDE that is focused on creating an easy-to-use development environment for GNOME",
     )
     gedit = ft.Checkbox(
         label="gedit",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="gedit is the official text editor of the GNOME desktop environment",
+    )
+    eclipse = ft.Checkbox(
+        label="eclipse",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="Eclipse is an integrated development environment (IDE) used in computer programming",
     )
     arduino_ide = ft.Checkbox(
         label="arduino",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="Arduino IDE is an open-source software that is mainly used for writing and uploading code in Arduino boards",
     )
 
     # Tecnologies
@@ -352,61 +394,100 @@ def main(page: ft.Page):
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="Git is a distributed version-control system for tracking changes in source code during software development",
     )
     node = ft.Checkbox(
         label="nodejs",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="Node.js is an open-source, cross-platform, back-end JavaScript runtime environment that runs on the V8 engine and executes JavaScript code outside a web browser",
     )
     mongo = ft.Checkbox(
         label="mongo/compass",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="MongoDB is a source-available cross-platform document-oriented database program. Classified as a NoSQL database program, MongoDB uses JSON-like documents with optional schemas",
     )
     python = ft.Checkbox(
         label="python",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="Python is an interpreted high-level general-purpose programming language",
     )
     rust = ft.Checkbox(
         label="rust",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="Rust is a multi-paradigm system programming language focused on safety, especially safe concurrency",
     )
     java = ft.Checkbox(
         label="java",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="Java is a class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible",
     )
     flutter = ft.Checkbox(
         label="flutter",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
-    )
-    # Others
-    lazyvim = ft.Checkbox(
-        label="lazyvim",
-        label_style=ft.TextStyle(color=WHITE),
-        fill_color=WHITE,
-        check_color=BLACK,
-    )
-    homebrew = ft.Checkbox(
-        label="homebrew",
-        label_style=ft.TextStyle(color=WHITE),
-        fill_color=WHITE,
-        check_color=BLACK,
+        tooltip="Flutter is an open-source UI software development kit created by Google",
     )
     docker = ft.Checkbox(
         label="docker",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
+        tooltip="Docker is a set of platform as a service products that use OS-level virtualization to deliver software in packages called containers",
+    )
+    unity = ft.Checkbox(
+        label="unity",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="Unity is a cross-platform game engine developed by Unity Technologies",
+    )
+    godot = ft.Checkbox(
+        label="godot",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="Godot Engine is a feature-packed, cross-platform game engine to create 2D and 3D games from a unified interface",
+    )
+    godot_mono = ft.Checkbox(
+        label="godot-mono",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="Godot Engine is a feature-packed, this version is a mono version",
+    )
+    pixelorama = ft.Checkbox(
+        label="pixelorama",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="Pixelorama is a free and open-source sprite editor for pixel art",
+    )
+
+    # Others
+    lazyvim = ft.Checkbox(
+        label="lazyvim",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="LazyVim is a simple and easy-to-use text editor that is designed to be fast and lightweight",
+    )
+    homebrew = ft.Checkbox(
+        label="homebrew",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="Homebrew is a package manager for macOS and Linux too",
     )
 
     # Return True if the specified package is installed
@@ -449,6 +530,8 @@ def main(page: ft.Page):
             list_app.append("gedit gedit-plugins")
         if arduino_ide.value and not is_installed("arduino-ide"):
             list_app.append("arduino-ide")
+        if eclipse.value and not is_installed("eclipse-java"):
+            list_app.append("eclipse-java")
 
         if list_app:
             # make a string with the list of editors
@@ -479,7 +562,17 @@ def main(page: ft.Page):
         if java.value and not is_installed("jdk-openjdk"):
             list_app.append("jdk-openjdk")
         if flutter.value and not is_installed("flutter-bin"):
-            list_app.append("flutter-bin")
+            list_app.append("flutter-bin google-chrome")
+        if docker.value and not is_installed("docker"):
+            list_app.append("docker docker-compose")
+        if unity.value and not is_installed("unityhub"):
+            list_app.append("unityhub")
+        if godot.value and not is_installed("godot"):
+            list_app.append("godot")
+        if godot_mono.value and not is_installed("godot-mono"):
+            list_app.append("godot-mono")
+        if pixelorama.value and not is_installed("pixelorama"):
+            list_app.append("pixelorama")
 
         if list_app:
             list_tecn = " ".join(list_app)
@@ -494,6 +587,8 @@ def main(page: ft.Page):
     install_command = "sudo pacman -Syy && yay -S --noconfirm --needed"
     install_yay = "sudo pacman -S --noconfirm --needed base-devel git && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm"
     add_user_flutter = "sudo usermod -a -G flutter $USER && echo $USER"
+    add_user_docker = "sudo usermod -a -G docker $USER && echo $USER"
+    lazyvim_command = "mv ~/.config/nvim{,.bak} && mv ~/.local/share/nvim{,.bak} && mv ~/.local/state/nvim{,.bak} && mv ~/.cache/nvim{,.bak} && git clone https://github.com/LazyVim/starter ~/.config/nvim && rm -rf ~/.config/nvim/.git"
 
     def exec_install_editors(list_editors):
         if list_editors:
@@ -530,13 +625,42 @@ def main(page: ft.Page):
             + " added to flutter group"
             + ";bash\"' "
         )
+        docker_command = (
+            "xfce4-terminal -e 'bash -c \""
+            + install_command
+            + " "
+            + list_tecn
+            + " && "
+            + add_user_docker
+            + " added to docker group"
+            + ";bash\"' "
+        )
         if not list_tecn:
             print("Not list")
         else:
-            if list_tecn and "flutter-bin" in list_tecn:
+            if list_tecn and ("flutter-bin" in list_tecn and "docker" in list_tecn):
                 process = (
                     subprocess.Popen(
                         flutter_command,
+                        docker_command,
+                        stdout=subprocess.PIPE,
+                        stderr=None,
+                        shell=True,
+                    ),
+                )
+            elif list_tecn and "flutter-bin" in list_tecn:
+                process = (
+                    subprocess.Popen(
+                        flutter_command,
+                        stdout=subprocess.PIPE,
+                        stderr=None,
+                        shell=True,
+                    ),
+                )
+            elif list_tecn and "docker" in list_tecn:
+                process = (
+                    subprocess.Popen(
+                        docker_command,
                         stdout=subprocess.PIPE,
                         stderr=None,
                         shell=True,
@@ -551,7 +675,6 @@ def main(page: ft.Page):
                         shell=True,
                     ),
                 )
-            print("Tecnologies installed or not selected")
 
     def compr_yay():
         print("Compr se esta ejecutando")
@@ -569,8 +692,11 @@ def main(page: ft.Page):
         # Borramos las vistas si hubiera alguna
         page.views.clear()
         page.theme = ft.Theme(color_scheme=ft.ColorScheme(primary=ft.colors.RED_300))
+        page.window_prevent_close = True
 
+        # Comprobe if yay is installed
         threading.Timer(2.0, compr_yay).start()
+
         ########  HOME ########
         # Anadimos la vista principal con la ruta slash y añadimos los controles de la pagina: un appbar
         # y dos botones elevados, uno para añadir productos y otro para buscar por fecha
@@ -610,12 +736,12 @@ def main(page: ft.Page):
                         on_click=lambda _: page.go("/others"),
                     ),
                     ft.ElevatedButton(
-                        "others",
+                        "exit",
                         bgcolor=ft.colors.RED_300,
                         color=ft.colors.WHITE,
                         height=60,
                         width=350,
-                        on_click=open_dlg_yay,
+                        on_click=page.window_destroy,
                     ),
                 ],
                 # Alineamos los controles en el centro de la pagina
@@ -639,7 +765,7 @@ def main(page: ft.Page):
                                 color=WHITE,
                                 actions=[  # type: ignore
                                     ft.IconButton(
-                                        ft.icons.QUESTION_ANSWER,
+                                        ft.icons.CODE,
                                         on_click=open_dlg_credits,
                                     )
                                 ],
@@ -689,9 +815,10 @@ def main(page: ft.Page):
                                                         ),
                                                         ft.Column(
                                                             [
-                                                                androidstudio,
-                                                                rider,
-                                                                monodevelop,
+                                                                eclipse,
+                                                                blank,
+                                                                blank,
+                                                                blank,
                                                             ],
                                                             width=150,
                                                         ),
@@ -724,6 +851,7 @@ def main(page: ft.Page):
                 ),
             )
         page.update()
+
         if page.route == "/tecnologies":
             # Añadimos la vista con el AppBar y un botón para volver a la vista anterior
             (
@@ -754,34 +882,62 @@ def main(page: ft.Page):
                                                                 git,
                                                                 node,
                                                                 mongo,
-                                                                python,
+                                                                docker,
                                                             ],
                                                             width=150,
                                                         ),
                                                         ft.Column(
                                                             [
-                                                                rust,
-                                                                java,
-                                                                flutter,
-                                                                clion,
+                                                                blank,
+                                                                blank,
+                                                                blank,
+                                                                blank,
                                                             ],
                                                             width=150,
                                                         ),
-                                                        ft.Column(
-                                                            [
-                                                                flutter,
-                                                                pycharm,
-                                                                intellij,
-                                                            ],
-                                                            width=150,
+                                                        ft.Container(
+                                                            ft.Column(
+                                                                [
+                                                                    ft.Text(
+                                                                        "languages",
+                                                                        color=WHITE,
+                                                                        text_align=ft.TextAlign.CENTER,
+                                                                    ),
+                                                                    rust,
+                                                                    java,
+                                                                    python,
+                                                                    flutter,
+                                                                ],
+                                                                width=150,
+                                                                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                                            ),
+                                                            bgcolor=ft.colors.GREEN_600,
+                                                            border_radius=ft.border_radius.all(
+                                                                15
+                                                            ),
+                                                            padding=15,
                                                         ),
-                                                        ft.Column(
-                                                            [
-                                                                clion,
-                                                                rider,
-                                                                monodevelop,
-                                                            ],
-                                                            width=150,
+                                                        ft.Container(
+                                                            ft.Column(
+                                                                [
+                                                                    ft.Text(
+                                                                        "game mode",
+                                                                        color=WHITE,
+                                                                        text_align=ft.TextAlign.CENTER,
+                                                                    ),
+                                                                    unity,
+                                                                    godot,
+                                                                    godot_mono,
+                                                                    pixelorama,
+                                                                ],
+                                                                width=150,
+                                                                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                                            ),
+                                                            bgcolor=ft.colors.GREY_600,
+                                                            border_radius=ft.border_radius.all(
+                                                                15
+                                                            ),
+                                                            padding=15,
                                                         ),
                                                     ],
                                                     scroll=ft.ScrollMode.AUTO,
@@ -812,6 +968,95 @@ def main(page: ft.Page):
                 ),
             )
         page.update()
+
+        if page.route == "/others":
+            # Añadimos la vista con el AppBar y un botón para volver a la vista anterior
+            (
+                page.views.append(
+                    ft.View(
+                        "/others",
+                        [  # type: ignore
+                            ft.AppBar(
+                                title=ft.Text("others :)", color=WHITE),
+                                bgcolor=ft.colors.RED_300,
+                                color=WHITE,
+                                actions=[  # type: ignore
+                                    ft.IconButton(
+                                        ft.icons.QUESTION_ANSWER,
+                                        on_click=open_dlg_credits,
+                                    )
+                                ],
+                            ),
+                            ft.Column(
+                                [
+                                    ft.Row(
+                                        [
+                                            ft.Container(
+                                                ft.Row(
+                                                    [
+                                                        ft.Column(
+                                                            [
+                                                                lazyvim,
+                                                                homebrew,
+                                                                blank,
+                                                                blank,
+                                                            ],
+                                                            width=150,
+                                                        ),
+                                                        ft.Column(
+                                                            [
+                                                                blank,
+                                                                blank,
+                                                                blank,
+                                                                blank,
+                                                            ],
+                                                            width=150,
+                                                        ),
+                                                        ft.Column(
+                                                            [
+                                                                blank,
+                                                                blank,
+                                                                blank,
+                                                                blank,
+                                                            ],
+                                                            width=150,
+                                                        ),
+                                                        ft.Column(
+                                                            [
+                                                                blank,
+                                                                blank,
+                                                                blank,
+                                                                blank,
+                                                            ],
+                                                            width=150,
+                                                        ),
+                                                    ],
+                                                    scroll=ft.ScrollMode.AUTO,
+                                                ),
+                                                expand=True,
+                                                adaptive=True,
+                                                padding=15,
+                                                border_radius=ft.border_radius.all(15),
+                                                bgcolor=base_color,
+                                            ),
+                                        ],
+                                    ),
+                                    ft.ElevatedButton(
+                                        "install",
+                                        bgcolor=base_color,
+                                        color=ft.colors.WHITE,
+                                        on_click=lambda _: page.go("/others"),
+                                    ),
+                                ],
+                            ),
+                        ],
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        spacing=24,
+                        padding=20,
+                    )
+                ),
+            )
+            page.update()
 
     page.update()
 
