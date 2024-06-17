@@ -69,7 +69,6 @@ def main(page: ft.Page):
     ##### Colors #####
     page_color = ft.colors.GREY_300
     base_color = ft.colors.RED_300
-    categories_color = ft.colors.BLACK87
     page.bgcolor = page_color
 
     # Image
@@ -771,6 +770,7 @@ def main(page: ft.Page):
         os.system("xfce4-terminal -e 'bash -c \"python3 --version; bash\" '")
 
     ####### COMMANDS ########
+
     install_command = "sudo pacman -Syy && yay -S --noconfirm --needed"
     install_yay = "sudo pacman -S --noconfirm --needed base-devel git && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm"
     add_user_flutter = "sudo usermod -a -G flutter $USER && echo $USER"
