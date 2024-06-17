@@ -7,6 +7,7 @@ import subprocess, os, shutil
 from shlex import quote
 
 from flet_core.colors import BLACK, WHITE
+from flet_core.icons import DRAW
 
 ######### PACMAN LIBRARIES ######
 # Thanks https://github.com/peakwinter/python-pacman/tree/master
@@ -89,7 +90,7 @@ def main(page: ft.Page):
 
     ################ Dialogs ###############
 
-    ####### EDITORS #######
+    ####### Dialog EDITORS #######
 
     # Dialog to install editors and close dialog
     def close_dlg_editor_and_install(e):
@@ -111,7 +112,7 @@ def main(page: ft.Page):
         print("Dialog opened")
         page.update()
 
-    ####### TECNOLOGIES ########
+    ####### Dialog TECNOLOGIES ########
 
     def close_dlg_tecn_and_install(e):
         dlg_tecn.open = False
@@ -130,7 +131,7 @@ def main(page: ft.Page):
         print("Dialog opened")
         page.update()
 
-    ######## OTHERS ########
+    ######## Dialog OTHERS ########
 
     def close_dlg_other_and_install(e):
         dlg_other.open = False
@@ -149,7 +150,7 @@ def main(page: ft.Page):
         print("Dialog opened")
         page.update()
 
-    ######## CREDITS ########
+    ######## Dialog CREDITS ########
 
     # Dialog to open credits dialog
     def open_dlg_credits(e):
@@ -163,7 +164,7 @@ def main(page: ft.Page):
         print("Dialog closed")
         page.update()
 
-    ######## REQUERIMENTS #######
+    ######## Dialog REQUERIMENTS #######
 
     def close_dlg_yay(e):
         dlg_install_yay.open = False
@@ -182,7 +183,7 @@ def main(page: ft.Page):
         print("Dialog opened")
         page.update()
 
-    ####### INSTALLED #######
+    ####### Dialog INSTALLED #######
 
     def open_dlg_installed():
         page.dialog = dlg_installed
@@ -195,7 +196,7 @@ def main(page: ft.Page):
         print("Dialog installed close")
         page.update()
 
-    ####### EDITORS DIALOGS #######
+    ####### Brute Dialogs #######
 
     dlg_installed = ft.AlertDialog(
         modal=True,
@@ -445,6 +446,55 @@ def main(page: ft.Page):
         check_color=BLACK,
         tooltip="MongoDB is a source-available cross-platform document-oriented database program. Classified as a NoSQL database program, MongoDB uses JSON-like documents with optional schemas",
     )
+    mysql = ft.Checkbox(
+        label="mysql",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="MySQL is an open-source relational database management system",
+    )
+    mariadb = ft.Checkbox(
+        label="mariaDB",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="MariaDB is a community-developed, commercially supported fork of the MySQL relational database management system",
+    )
+    postgre = ft.Checkbox(
+        label="postgreSQL",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="postgreSQL is a source-available cross-platform document-oriented database program.",
+    )
+    phpMyAdmin = ft.Checkbox(
+        label="phpMyAdmin",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="phpMyAdmin is a free and open-source administration tool for MySQL and MariaDB",
+    )
+    mysql_workbench = ft.Checkbox(
+        label="mysql-workbench",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="MySQL Workbench is a unified visual tool by Oracle for database architects, developers, and DBAs",
+    )
+    sqlitebrowser = ft.Checkbox(
+        label="sqlitebrowser",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="DB Browser for SQLite is a high quality, visual, open-source tool to create, design, and edit database files compatible with SQLite",
+    )
+    mysql_clients = ft.Checkbox(
+        label="mysql-clients",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="MySQL Workbench is a unified visual tool by Oracle for database architects, developers, and DBAs",
+    )
     python = ft.Checkbox(
         label="python",
         label_style=ft.TextStyle(color=WHITE),
@@ -510,19 +560,75 @@ def main(page: ft.Page):
     )
 
     # Others
-    lazyvim = ft.Checkbox(
-        label="lazyvim",
-        label_style=ft.TextStyle(color=WHITE),
-        fill_color=WHITE,
-        check_color=BLACK,
-        tooltip="LazyVim is a simple and easy-to-use text editor that is designed to be fast and lightweight",
+    rb_neovim = ft.RadioGroup(
+        content=ft.Column(
+            [
+                ft.Radio(
+                    value="lazyvim",
+                    label="lazyvim",
+                    label_style=ft.TextStyle(color=WHITE),
+                    fill_color=ft.colors.WHITE,
+                    tooltip="LazyVim is a simple and easy-to-use text editor that is designed to be fast and lightweight",
+                ),
+                ft.Radio(
+                    value="nvchad",
+                    label="nvchad",
+                    label_style=ft.TextStyle(color=WHITE),
+                    fill_color=ft.colors.WHITE,
+                    tooltip="NvChad is a Neovim configuration that takes the best of Vim and Emacs",
+                ),
+                ft.Radio(
+                    value="astrovim",
+                    label="astrovim",
+                    label_style=ft.TextStyle(color=WHITE),
+                    fill_color=ft.colors.WHITE,
+                    tooltip="AstroVim is a set of configurations for Neovim that aims to be a good starting point for anyone using Neovim",
+                ),
+            ],
+        ),
     )
-    nvchad = ft.Checkbox(
-        label="nvchad",
+
+    penpot = ft.Checkbox(
+        label="penpot",
         label_style=ft.TextStyle(color=WHITE),
         fill_color=WHITE,
         check_color=BLACK,
-        tooltip="Homebrew is a package manager for macOS and Linux too",
+        tooltip="Penpot is the first Open Source design and prototyping platform meant for cross-domain teams",
+    )
+    figma = ft.Checkbox(
+        label="figma",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="Figma is a vector graphics editor and prototyping tool which is primarily web-based",
+    )
+    pencil = ft.Checkbox(
+        label="pencil",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="Pencil is a free and open-source GUI prototyping tool that is quick, easy, and works across multiple platforms",
+    )
+    draw = ft.Checkbox(
+        label="draw.io",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="Draw.io is a free online diagram software for making flowcharts, process diagrams, org charts, UML, ER and network diagrams",
+    )
+    umlet = ft.Checkbox(
+        label="umlet",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="UMLET is a free UML tool for fast UML diagrams",
+    )
+    umbrello = ft.Checkbox(
+        label="umbrello",
+        label_style=ft.TextStyle(color=WHITE),
+        fill_color=WHITE,
+        check_color=BLACK,
+        tooltip="Umbrello UML Modeller is a Unified Modelling Language diagram program for KDE",
     )
 
     ################# FUNCTIONS ##################
@@ -532,7 +638,7 @@ def main(page: ft.Page):
         # Return True if the specified package is installed
         return pacman("-Q", package)["code"] == 0
 
-    ###### EDITORS #######
+    ###### function EDITORS #######
     def install_editors(e):
         list_app = []
         if vscode.value and not is_installed("visual-studio-code-bin"):
@@ -583,7 +689,7 @@ def main(page: ft.Page):
                 "Editor installed o not select"
             )  # if the list is empty print the message
 
-    ###### TECNOLOGIES #######
+    ###### function TECNOLOGIES #######
     def install_tecnologies(e):
         list_app = []
         if git.value and is_installed("git"):
@@ -592,6 +698,20 @@ def main(page: ft.Page):
             list_app.append("node npm")
         if mongo.value and not is_installed("mongodb-bin"):
             list_app.append("mongodb-bin mongosh-bin mongodb-tools mongodb-compass")
+        if mysql.value and not is_installed("mysql"):
+            list_app.append("mysql")
+        if mariadb.value and not is_installed("mariadb"):
+            list_app.append("mariadb")
+        if postgre.value and not is_installed("postgresql"):
+            list_app.append("postgresql")
+        if phpMyAdmin.value and not is_installed("phpmyadmin"):
+            list_app.append("phpmyadmin")
+        if mysql_workbench.value and not is_installed("mysql-workbench"):
+            list_app.append("mysql-workbench")
+        if mysql_clients.value and not is_installed("mysql-clients"):
+            list_app.append("mysql-clients")
+        if sqlitebrowser.value and not is_installed("sqlitebrowser"):
+            list_app.append("sqlitebrowser")
         if python.value and not is_installed("python"):
             list_app.append("python")
         if rust.value and not is_installed("rust"):
@@ -618,13 +738,28 @@ def main(page: ft.Page):
             open_dlg_installed()
             print("Tecnologies installed or not selected")
 
-    ###### OTHERS #######
+    ###### function OTHERS #######
     def install_other(e):
         list_app = []
-        if lazyvim.value:
+        if rb_neovim.value == "lazyvim":
             list_app.append("lazyvim")
-        if nvchad.value:
+        if rb_neovim.value == "nvchad":
             list_app.append("nvchad")
+        if rb_neovim.value == "astrovim":
+            list_app.append("astrovim")
+        if penpot.value and not is_installed("penpot"):
+            list_app.append("penpot")
+        if figma.value and not is_installed("figma"):
+            list_app.append("figma-linux")
+        if pencil.value and not is_installed("pencil"):
+            list_app.append("pencil")
+        if draw.value and not is_installed("drawio-desktop"):
+            list_app.append("drawio-desktop")
+        if umlet.value and not is_installed("umlet"):
+            list_app.append("umlet")
+        if umbrello.value and not is_installed("umbrello"):
+            list_app.append("umbrello")
+
         if list_app:
             list_others = " ".join(list_app)
             exec_install_others(list_others)
@@ -691,7 +826,7 @@ def main(page: ft.Page):
         if not list_tecn:
             print("Not list")
         else:
-            if list_tecn and ("flutter-bin" in list_tecn and "docker" in list_tecn):
+            if "flutter-bin" in list_tecn and "docker" in list_tecn:
                 process = (
                     subprocess.Popen(
                         flutter_command,
@@ -701,7 +836,7 @@ def main(page: ft.Page):
                         shell=True,
                     ),
                 )
-            elif list_tecn and "flutter-bin" in list_tecn:
+            elif "flutter-bin" in list_tecn:
                 process = (
                     subprocess.Popen(
                         flutter_command,
@@ -710,7 +845,7 @@ def main(page: ft.Page):
                         shell=True,
                     ),
                 )
-            elif list_tecn and "docker" in list_tecn:
+            elif "docker" in list_tecn:
                 process = (
                     subprocess.Popen(
                         docker_command,
@@ -730,30 +865,65 @@ def main(page: ft.Page):
                 )
 
     def exec_install_others(list_others):
+        simple_command = (
+            "xfce4-terminal -e 'bash -c \""
+            + install_command
+            + " "
+            + list_others
+            + ";bash\"' "
+        )
+        lazyvim = (
+            "xfce4-terminal -e 'bash -c \""
+            + install_command
+            + " "
+            + list_others
+            + " && "
+            + lazyvim_command
+            + ";bash\"' "
+        )
+
         if not list_others:
             print("Not list")
         else:
-
-            if "lazyvim" in list_others:
-                process = (
-                    subprocess.Popen(
-                        "xfce4-terminal -e 'bash -c \"" + lazyvim_command + ";bash\"' ",
-                        stdout=subprocess.PIPE,
-                        stderr=None,
-                        shell=True,
-                    ),
-                )
-            if "nvchad" in list_others:
+            if "lazyvim" in list_others and (
+                "penpot" in list_others or "figma" in list_others
+            ):
                 process = (
                     subprocess.Popen(
                         "xfce4-terminal -e 'bash -c \""
                         + install_command
-                        + " nvchad-git;bash\"' ",
+                        + " "
+                        + list_others
+                        + " && "
+                        + lazyvim_command
+                        + ";bash\"' ",
                         stdout=subprocess.PIPE,
                         stderr=None,
                         shell=True,
                     ),
                 )
+            elif "lazyvim" in list_others:
+                process = (
+                    subprocess.Popen(
+                        "xfce4-terminal -e 'bash -c \""
+                        + lazyvim_command
+                        + " ;bash\"' ",
+                        stdout=subprocess.PIPE,
+                        stderr=None,
+                        shell=True,
+                    ),
+                )
+            else:
+                process = (
+                    subprocess.Popen(
+                        simple_command,
+                        stdout=subprocess.PIPE,
+                        stderr=None,
+                        shell=True,
+                    ),
+                )
+
+    ######### Check Yay #########
 
     def compr_yay():
         print("Compr se esta ejecutando")
@@ -790,6 +960,13 @@ def main(page: ft.Page):
                     ft.AppBar(
                         title=ft.Text("arch_develop :)", color=WHITE),
                         bgcolor=ft.colors.RED_300,
+                        actions=[  # type: ignore
+                            ft.IconButton(
+                                ft.icons.CODE,
+                                icon_color=WHITE,
+                                on_click=open_dlg_credits,
+                            )
+                        ],
                     ),
                     img,
                     ft.ElevatedButton(
@@ -816,14 +993,14 @@ def main(page: ft.Page):
                         width=350,
                         on_click=lambda _: page.go("/others"),
                     ),
-                    ft.ElevatedButton(
-                        "exit",
-                        bgcolor=ft.colors.RED_300,
-                        color=ft.colors.WHITE,
-                        height=60,
-                        width=350,
-                        on_click=page.window_destroy,
-                    ),
+                    # ft.ElevatedButton(
+                    #     "exit",
+                    #     bgcolor=ft.colors.RED_300,
+                    #     color=ft.colors.WHITE,
+                    #     height=60,
+                    #     width=350,
+                    #     on_click=page.window_destroy,
+                    # ),
                 ],
                 # Alineamos los controles en el centro de la pagina
                 vertical_alignment=ft.MainAxisAlignment.CENTER,
@@ -934,7 +1111,7 @@ def main(page: ft.Page):
             )
         page.update()
 
-        ######## TECNOLOGIES ########
+        ######## TECNOLOGIES #######
         if page.route == "/tecnologies":
             # Añadimos la vista con el AppBar y un botón para volver a la vista anterior
             (
@@ -948,7 +1125,7 @@ def main(page: ft.Page):
                                 color=WHITE,
                                 actions=[  # type: ignore
                                     ft.IconButton(
-                                        ft.icons.QUESTION_ANSWER,
+                                        ft.icons.CODE,
                                         on_click=open_dlg_credits,
                                     )
                                 ],
@@ -964,17 +1141,7 @@ def main(page: ft.Page):
                                                             [
                                                                 git,
                                                                 node,
-                                                                mongo,
                                                                 docker,
-                                                            ],
-                                                            width=150,
-                                                        ),
-                                                        ft.Column(
-                                                            [
-                                                                blank,
-                                                                blank,
-                                                                blank,
-                                                                blank,
                                                             ],
                                                             width=150,
                                                         ),
@@ -1017,6 +1184,44 @@ def main(page: ft.Page):
                                                                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                                                             ),
                                                             bgcolor=ft.colors.GREY_600,
+                                                            border_radius=ft.border_radius.all(
+                                                                15
+                                                            ),
+                                                            padding=15,
+                                                        ),
+                                                        ft.Container(
+                                                            ft.Column(
+                                                                [
+                                                                    ft.Text(
+                                                                        "data base",
+                                                                        color=WHITE,
+                                                                        text_align=ft.TextAlign.CENTER,
+                                                                    ),
+                                                                    ft.Row(
+                                                                        [
+                                                                            ft.Column(
+                                                                                [
+                                                                                    phpMyAdmin,
+                                                                                    mysql,
+                                                                                    mysql_clients,
+                                                                                    mysql_workbench,
+                                                                                ],
+                                                                            ),
+                                                                            ft.Column(
+                                                                                [
+                                                                                    postgre,
+                                                                                    mongo,
+                                                                                    mariadb,
+                                                                                    sqlitebrowser,
+                                                                                ]
+                                                                            ),
+                                                                        ]
+                                                                    ),
+                                                                ],
+                                                                width=320,
+                                                                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                                            ),
+                                                            bgcolor=ft.colors.ORANGE_900,
                                                             border_radius=ft.border_radius.all(
                                                                 15
                                                             ),
@@ -1066,7 +1271,7 @@ def main(page: ft.Page):
                                 color=WHITE,
                                 actions=[  # type: ignore
                                     ft.IconButton(
-                                        ft.icons.QUESTION_ANSWER,
+                                        ft.icons.CODE,
                                         on_click=open_dlg_credits,
                                     )
                                 ],
@@ -1078,23 +1283,60 @@ def main(page: ft.Page):
                                             ft.Container(
                                                 ft.Row(
                                                     [
-                                                        ft.Column(
-                                                            [
-                                                                lazyvim,
-                                                                nvchad,
-                                                                blank,
-                                                                blank,
-                                                            ],
-                                                            width=150,
+                                                        ft.Container(
+                                                            ft.Column(
+                                                                [
+                                                                    ft.Text(
+                                                                        "neovim",
+                                                                        color=WHITE,
+                                                                        text_align=ft.TextAlign.CENTER,
+                                                                    ),
+                                                                    rb_neovim,
+                                                                ],
+                                                                width=150,
+                                                                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                                            ),
+                                                            bgcolor=ft.colors.GREY_600,
+                                                            border_radius=ft.border_radius.all(
+                                                                15
+                                                            ),
+                                                            padding=15,
                                                         ),
-                                                        ft.Column(
-                                                            [
-                                                                blank,
-                                                                blank,
-                                                                blank,
-                                                                blank,
-                                                            ],
-                                                            width=150,
+                                                        ft.Container(
+                                                            ft.Column(
+                                                                [
+                                                                    ft.Text(
+                                                                        "design tools",
+                                                                        color=WHITE,
+                                                                        text_align=ft.TextAlign.CENTER,
+                                                                    ),
+                                                                    ft.Row(
+                                                                        [
+                                                                            ft.Column(
+                                                                                [
+                                                                                    penpot,
+                                                                                    figma,
+                                                                                    pencil,
+                                                                                ],
+                                                                            ),
+                                                                            ft.Column(
+                                                                                [
+                                                                                    draw,
+                                                                                    umlet,
+                                                                                    umbrello,
+                                                                                ]
+                                                                            ),
+                                                                        ]
+                                                                    ),
+                                                                ],
+                                                                width=220,
+                                                                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                                            ),
+                                                            bgcolor=ft.colors.GREEN,
+                                                            border_radius=ft.border_radius.all(
+                                                                15
+                                                            ),
+                                                            padding=15,
                                                         ),
                                                         ft.Column(
                                                             [
