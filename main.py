@@ -943,7 +943,6 @@ def main(page: ft.Page):
         # Borramos las vistas si hubiera alguna
         page.views.clear()
         page.theme = ft.Theme(color_scheme=ft.ColorScheme(primary=ft.colors.RED_300))
-        page.window_prevent_close = True
 
         # Comprobe if yay is installed
         threading.Timer(2.0, compr_yay).start()
