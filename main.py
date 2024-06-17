@@ -282,13 +282,12 @@ def main(page: ft.Page):
         modal=True,
         title=ft.Text("Please Confirm"),
         content=ft.Text(
-            "You havent install yay and it is necessary for continues, Do you wat to continue with installation?"
+            "You havent install yay and/or xfce4-terminal and they are necessary for continues, Do you wat to continue with installation?"
         ),
         actions=[
             ft.TextButton(text="Cancel", on_click=close_dlg_yay),
             ft.TextButton(text="Install", on_click=close_dlg_yay_install),
         ],
-        actions_alignment=ft.MainAxisAlignment.END,
         on_dismiss=print("Dialog dismissed"),
     )
 
