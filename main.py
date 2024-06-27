@@ -1,11 +1,10 @@
 import flet as ft
 import os
+import subprocess
+import shutil
 import threading
 
-# from pyfiglet import Figlet
-import subprocess, os, shutil
 from shlex import quote
-
 from flet_core.colors import BLACK, WHITE
 from flet_core.icons import DRAW
 
