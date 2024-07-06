@@ -152,7 +152,7 @@ def main(page: ft.Page):
 
     # Dialog to open credits dialog
     def open_dlg_credits(e):
-        page.dialog = dlg_credits
+        page.overlay.append(dlg_credits)
         dlg_credits.open = True
         print("Dialog opened")
         page.update()
