@@ -133,13 +133,13 @@ def main(page: ft.Page):
 
     def close_dlg_other_and_install(e):
         dlg_other.open = False
-        print("Dialog closed")
+        print("Dialog other closed and install")
         install_other(e)
         page.update()
 
     def close_dlg_other(e):
         dlg_other.open = False
-        print("Dialog closed")
+        print("Dialog other closed")
         page.update()
 
     def open_dlg_other(e):
@@ -808,7 +808,6 @@ def main(page: ft.Page):
             + list_tecn
             + " && "
             + add_user_flutter
-            + " added to flutter group"
             + ";bash\"' "
         )
         docker_command = (
@@ -818,7 +817,6 @@ def main(page: ft.Page):
             + list_tecn
             + " && "
             + add_user_docker
-            + " added to docker group"
             + ";bash\"' "
         )
         if not list_tecn:
@@ -1072,9 +1070,6 @@ def main(page: ft.Page):
                                                         ft.Column(
                                                             [
                                                                 eclipse,
-                                                                blank,
-                                                                blank,
-                                                                blank,
                                                             ],
                                                             width=150,
                                                         ),
