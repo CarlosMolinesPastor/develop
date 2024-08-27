@@ -15,7 +15,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install flet
 ```
-or
+or instead of installing pip install flet
 ```
 pip install -r requirements.txt
 ```
