@@ -7,6 +7,7 @@ It's makes with [flet](https://flet.dev/) flutter with python.
 ## Install dependencies && Create a environment
 
 ```
+
 sudo pacman -S xfce4-terminal mpv gtk3 gstreamer
 sudo ln -s /usr/lib/libmpv.so /usr/lib/libmpv.so.1
 mkdir develop
@@ -14,6 +15,7 @@ cd develop
 python3 -m venv .venv
 source .venv/bin/activate
 pip install flet
+
 ```
 
 ## Clone the repository:
