@@ -6,7 +6,7 @@ It's makes with [flet](https://flet.dev/) flutter with python.
 
 ## Install dependencies && Create a environment
 
-´´´
+```
 sudo pacman -S xfce4-terminal mpv gtk3 gstreamer
 sudo ln -s /usr/lib/libmpv.so /usr/lib/libmpv.so.1
 mkdir develop
@@ -14,7 +14,7 @@ cd develop
 python3 -m venv .venv
 source .venv/bin/activate
 pip install flet
-´´´
+```
 
 ## Clone the repository:
 
@@ -26,7 +26,7 @@ pip install flet
 
 ## To create and packaging the app
 
-´´´flet build linux´´´
+```flet build linux```
 
 <h2>Status</h2>
 <a href="https://github.com/CarlosMolinesPastor/Factia/releases/"><img src="https://img.shields.io/github/tag/CarlosMolinesPastor/Factia?include_prereleases=&sort=semver&color=blue" alt="GitHub tag"></a>
