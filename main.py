@@ -5,8 +5,9 @@ import shutil
 import threading
 
 from shlex import quote
-from flet_core.colors import BLACK, WHITE
-from flet_core.icons import DRAW
+
+BLACK = ft.Colors.BLACK
+WHITE = ft.Colors.WHITE
 
 ######### PACMAN LIBRARIES ######
 # Thanks https://github.com/peakwinter/python-pacman/tree/master
@@ -35,7 +36,7 @@ def pacman(flags, pkgs=[], eflgs=[], pacman_bin=__PACMAN_BIN):
     # Subprocess wrapper, get all data"""
     if not pkgs:
         cmd = [pacman_bin, "--noconfirm", flags]
-    elif type(pkgs) == list:
+    elif type(pkgs) is list:
         cmd = [pacman_bin, "--noconfirm", flags]
         cmd += [quote(s) for s in pkgs]
     else:
@@ -62,13 +63,16 @@ def main(page: ft.Page):
     page.scroll = ft.ScrollMode.AUTO
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    page.window_min_height = 600
-    page.window_min_width = 800
+    page.window.min_height = 600
+    page.window.min_width = 800
 
     ##### Colors #####
-    page_color = ft.colors.GREY_300
-    base_color = ft.colors.RED_300
+    page_color = ft.Colors.GREY_300
+    base_color = ft.Colors.RED_300
     page.bgcolor = page_color
+
+    # SALIDA DE Text
+    output_text = ft.Text(value="", selectable=True, color=BLACK)
 
     # Image
     img = ft.Image(
@@ -105,6 +109,7 @@ def main(page: ft.Page):
 
     # Dialog to open dialog
     def open_dlg_editor(e):
+        page.floating_action_button
         page.dialog = dlg_editor
         dlg_editor.open = True
         print("Dialog opened")
@@ -281,7 +286,7 @@ def main(page: ft.Page):
         modal=True,
         title=ft.Text("Please Confirm"),
         content=ft.Text(
-            "You havent install yay and/or xfce4-terminal and they are necessary for continues, Do you wat to continue with installation?"
+            "You havent install yay and it is necessary for continues, Do you wat to continue with installation?"
         ),
         actions=[
             ft.TextButton(text="Cancel", on_click=close_dlg_yay),
@@ -564,21 +569,21 @@ def main(page: ft.Page):
                     value="lazyvim",
                     label="lazyvim",
                     label_style=ft.TextStyle(color=WHITE),
-                    fill_color=ft.colors.WHITE,
+                    fill_color=ft.Colors.WHITE,
                     tooltip="LazyVim is a simple and easy-to-use text editor that is designed to be fast and lightweight",
                 ),
                 ft.Radio(
                     value="nvchad",
                     label="nvchad",
                     label_style=ft.TextStyle(color=WHITE),
-                    fill_color=ft.colors.WHITE,
+                    fill_color=ft.Colors.WHITE,
                     tooltip="NvChad is a Neovim configuration that takes the best of Vim and Emacs",
                 ),
                 ft.Radio(
                     value="astrovim",
                     label="astrovim",
                     label_style=ft.TextStyle(color=WHITE),
-                    fill_color=ft.colors.WHITE,
+                    fill_color=ft.Colors.WHITE,
                     tooltip="AstroVim is a set of configurations for Neovim that aims to be a good starting point for anyone using Neovim",
                 ),
             ],
@@ -764,9 +769,6 @@ def main(page: ft.Page):
             open_dlg_installed()
             print("Others installed or not selected")
 
-    def open_terminal(e):
-        os.system("xfce4-terminal -e 'bash -c \"python3 --version; bash\" '")
-
     ####### COMMANDS ########
 
     install_command = "sudo pacman -Syy && yay -S --noconfirm --needed"
@@ -775,149 +777,117 @@ def main(page: ft.Page):
     add_user_docker = "sudo usermod -a -G docker $USER && echo $USER"
     lazyvim_command = "mv ~/.config/nvim{,.bak} && mv ~/.local/share/nvim{,.bak} && mv ~/.local/state/nvim{,.bak} && mv ~/.cache/nvim{,.bak} && git clone https://github.com/LazyVim/starter ~/.config/nvim && rm -rf ~/.config/nvim/.git"
 
-    ######## INSTALL FUNCIONS ########
+    ######## INSTALL FUNCIONS  SIN TERMINAL########
     def exec_install_editors(list_editors):
         if list_editors:
-            process = (
-                subprocess.Popen(
-                    "xfce4-terminal -e 'bash -c \""
-                    + install_command
-                    + " "
-                    + list_editors
-                    + ";bash\"' ",
+            command = install_command + " " + list_editors
+
+            def run():
+                process = subprocess.Popen(
+                    command,
                     stdout=subprocess.PIPE,
-                    stderr=None,
+                    stderr=subprocess.STDOUT,
                     shell=True,
-                ),
-            )
+                    text=True,
+                )
+                output = ""
+                if process.stdout is not None:
+                    for line in process.stdout:
+                        output += line
+                        print(
+                            line, end=""
+                        )  # Puedes actualizar un widget Flet aquí si lo deseas
+                    process.wait()
+                if process.returncode == 0:
+                    print("Instalación completada correctamente.")
+                else:
+                    print("Error durante la instalación.")
+
+            threading.Thread(target=run, daemon=True).start()
         else:
             print("Editors installed or not selected")
 
     def exec_install_tecn(list_tecn):
-        simple_command = (
-            "xfce4-terminal -e 'bash -c \""
-            + install_command
-            + " "
-            + list_tecn
-            + ";bash\"' "
-        )
-        flutter_command = (
-            "xfce4-terminal -e 'bash -c \""
-            + install_command
-            + " "
-            + list_tecn
-            + " && "
-            + add_user_flutter
-            + ";bash\"' "
-        )
-        docker_command = (
-            "xfce4-terminal -e 'bash -c \""
-            + install_command
-            + " "
-            + list_tecn
-            + " && "
-            + add_user_docker
-            + ";bash\"' "
-        )
         if not list_tecn:
             print("Not list")
+            return
+
+        if "flutter-bin" in list_tecn and "docker" in list_tecn:
+            command = (
+                install_command
+                + " "
+                + list_tecn
+                + " && "
+                + add_user_flutter
+                + " && "
+                + add_user_docker
+            )
+        elif "flutter-bin" in list_tecn:
+            command = install_command + " " + list_tecn + " && " + add_user_flutter
+        elif "docker" in list_tecn:
+            command = install_command + " " + list_tecn + " && " + add_user_docker
         else:
-            if "flutter-bin" in list_tecn and "docker" in list_tecn:
-                process = (
-                    subprocess.Popen(
-                        flutter_command,
-                        docker_command,
-                        stdout=subprocess.PIPE,
-                        stderr=None,
-                        shell=True,
-                    ),
-                )
-            elif "flutter-bin" in list_tecn:
-                process = (
-                    subprocess.Popen(
-                        flutter_command,
-                        stdout=subprocess.PIPE,
-                        stderr=None,
-                        shell=True,
-                    ),
-                )
-            elif "docker" in list_tecn:
-                process = (
-                    subprocess.Popen(
-                        docker_command,
-                        stdout=subprocess.PIPE,
-                        stderr=None,
-                        shell=True,
-                    ),
-                )
+            command = install_command + " " + list_tecn
+
+        def run():
+            process = subprocess.Popen(
+                command,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                shell=True,
+                text=True,
+            )
+            output = ""
+            if process.stdout is not None:
+                for line in process.stdout:
+                    output += line
+                    print(
+                        line, end=""
+                    )  # Puedes actualizar un widget Flet aquí si lo deseas
+                process.wait()
+            if process.returncode == 0:
+                print("Instalación completada correctamente.")
             else:
-                process = (
-                    subprocess.Popen(
-                        simple_command,
-                        stdout=subprocess.PIPE,
-                        stderr=None,
-                        shell=True,
-                    ),
-                )
+                print("Error durante la instalación.")
+
+        threading.Thread(target=run, daemon=True).start()
 
     def exec_install_others(list_others):
-        simple_command = (
-            "xfce4-terminal -e 'bash -c \""
-            + install_command
-            + " "
-            + list_others
-            + ";bash\"' "
-        )
-        lazyvim = (
-            "xfce4-terminal -e 'bash -c \""
-            + install_command
-            + " "
-            + list_others
-            + " && "
-            + lazyvim_command
-            + ";bash\"' "
-        )
-
         if not list_others:
             print("Not list")
+            return
+
+        if "lazyvim" in list_others and (
+            "penpot" in list_others or "figma" in list_others
+        ):
+            command = install_command + " " + list_others + " && " + lazyvim_command
+        elif "lazyvim" in list_others:
+            command = lazyvim_command
         else:
-            if "lazyvim" in list_others and (
-                "penpot" in list_others or "figma" in list_others
-            ):
-                process = (
-                    subprocess.Popen(
-                        "xfce4-terminal -e 'bash -c \""
-                        + install_command
-                        + " "
-                        + list_others
-                        + " && "
-                        + lazyvim_command
-                        + ";bash\"' ",
-                        stdout=subprocess.PIPE,
-                        stderr=None,
-                        shell=True,
-                    ),
-                )
-            elif "lazyvim" in list_others:
-                process = (
-                    subprocess.Popen(
-                        "xfce4-terminal -e 'bash -c \""
-                        + lazyvim_command
-                        + " ;bash\"' ",
-                        stdout=subprocess.PIPE,
-                        stderr=None,
-                        shell=True,
-                    ),
-                )
+            command = install_command + " " + list_others
+
+        def run():
+            process = subprocess.Popen(
+                command,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                shell=True,
+                text=True,
+            )
+            output = ""
+            if process.stdout is not None:
+                for line in process.stdout:
+                    output += line
+                    print(
+                        line, end=""
+                    )  # Puedes actualizar un widget Flet aquí si lo deseas
+                process.wait()
+            if process.returncode == 0:
+                print("Instalación completada correctamente.")
             else:
-                process = (
-                    subprocess.Popen(
-                        simple_command,
-                        stdout=subprocess.PIPE,
-                        stderr=None,
-                        shell=True,
-                    ),
-                )
+                print("Error durante la instalación.")
+
+        threading.Thread(target=run, daemon=True).start()
 
     ######### Check Yay #########
 
@@ -930,7 +900,28 @@ def main(page: ft.Page):
             print("Yay installed")
 
     def exec_install_yay():
-        os.system("xfce4-terminal -e 'bash -c \"" + install_yay + "; bash\" '")
+        def run():
+            process = subprocess.Popen(
+                install_yay,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                shell=True,
+                text=True,
+            )
+            output = ""
+            if process.stdout is not None:
+                for line in process.stdout:
+                    output += line
+                    print(
+                        line, end=""
+                    )  # Puedes actualizar un widget Flet aquí si lo deseas
+                process.wait()
+            if process.returncode == 0:
+                print("Instalación de yay completada correctamente.")
+            else:
+                print("Error durante la instalación de yay.")
+
+        threading.Thread(target=run, daemon=True).start()
 
     ############## ROUTE CHANGE ###############
 
@@ -938,7 +929,7 @@ def main(page: ft.Page):
     def route_change(route):
         # Borramos las vistas si hubiera alguna
         page.views.clear()
-        page.theme = ft.Theme(color_scheme=ft.ColorScheme(primary=ft.colors.RED_300))
+        page.theme = ft.Theme(color_scheme=ft.ColorScheme(primary=ft.Colors.RED_300))
 
         # Comprobe if yay is installed
         threading.Timer(2.0, compr_yay).start()
@@ -954,10 +945,10 @@ def main(page: ft.Page):
                 [
                     ft.AppBar(
                         title=ft.Text("arch_develop :)", color=WHITE),
-                        bgcolor=ft.colors.RED_300,
+                        bgcolor=ft.Colors.RED_300,
                         actions=[  # type: ignore
                             ft.IconButton(
-                                ft.icons.CODE,
+                                ft.Icons.CODE,
                                 icon_color=WHITE,
                                 on_click=open_dlg_credits,
                             )
@@ -966,32 +957,32 @@ def main(page: ft.Page):
                     img,
                     ft.ElevatedButton(
                         "text editors",
-                        bgcolor=ft.colors.RED_300,
-                        color=ft.colors.WHITE,
+                        bgcolor=ft.Colors.RED_300,
+                        color=ft.Colors.WHITE,
                         height=60,
                         width=350,
                         on_click=lambda _: page.go("/text_editors"),
                     ),
                     ft.ElevatedButton(
                         "tecnologies",
-                        bgcolor=ft.colors.RED_300,
-                        color=ft.colors.WHITE,
+                        bgcolor=ft.Colors.RED_300,
+                        color=ft.Colors.WHITE,
                         height=60,
                         width=350,
                         on_click=lambda _: page.go("/tecnologies"),
                     ),
                     ft.ElevatedButton(
                         "others",
-                        bgcolor=ft.colors.RED_300,
-                        color=ft.colors.WHITE,
+                        bgcolor=ft.Colors.RED_300,
+                        color=ft.Colors.WHITE,
                         height=60,
                         width=350,
                         on_click=lambda _: page.go("/others"),
                     ),
                     # ft.ElevatedButton(
                     #     "exit",
-                    #     bgcolor=ft.colors.RED_300,
-                    #     color=ft.colors.WHITE,
+                    #     bgcolor=ft.Colors.RED_300,
+                    #     color=ft.Colors.WHITE,
                     #     height=60,
                     #     width=350,
                     #     on_click=page.window_destroy,
@@ -1015,11 +1006,11 @@ def main(page: ft.Page):
                         [  # type: ignore
                             ft.AppBar(
                                 title=ft.Text("text_editors :)", color=WHITE),
-                                bgcolor=ft.colors.RED_300,
+                                bgcolor=ft.Colors.RED_300,
                                 color=WHITE,
                                 actions=[  # type: ignore
                                     ft.IconButton(
-                                        ft.icons.CODE,
+                                        ft.Icons.CODE,
                                         on_click=open_dlg_credits,
                                     )
                                 ],
@@ -1089,7 +1080,7 @@ def main(page: ft.Page):
                                     ft.ElevatedButton(
                                         "install",
                                         bgcolor=base_color,
-                                        color=ft.colors.WHITE,
+                                        color=ft.Colors.WHITE,
                                         on_click=open_dlg_editor,
                                     ),
                                 ],
@@ -1113,11 +1104,11 @@ def main(page: ft.Page):
                         [  # type: ignore
                             ft.AppBar(
                                 title=ft.Text("tecnologies :)", color=WHITE),
-                                bgcolor=ft.colors.RED_300,
+                                bgcolor=ft.Colors.RED_300,
                                 color=WHITE,
                                 actions=[  # type: ignore
                                     ft.IconButton(
-                                        ft.icons.CODE,
+                                        ft.Icons.CODE,
                                         on_click=open_dlg_credits,
                                     )
                                 ],
@@ -1153,7 +1144,7 @@ def main(page: ft.Page):
                                                                 width=150,
                                                                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                                                             ),
-                                                            bgcolor=ft.colors.GREEN_600,
+                                                            bgcolor=ft.Colors.GREEN_600,
                                                             border_radius=ft.border_radius.all(
                                                                 15
                                                             ),
@@ -1175,7 +1166,7 @@ def main(page: ft.Page):
                                                                 width=150,
                                                                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                                                             ),
-                                                            bgcolor=ft.colors.GREY_600,
+                                                            bgcolor=ft.Colors.GREY_600,
                                                             border_radius=ft.border_radius.all(
                                                                 15
                                                             ),
@@ -1213,7 +1204,7 @@ def main(page: ft.Page):
                                                                 width=320,
                                                                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                                                             ),
-                                                            bgcolor=ft.colors.ORANGE_900,
+                                                            bgcolor=ft.Colors.ORANGE_900,
                                                             border_radius=ft.border_radius.all(
                                                                 15
                                                             ),
@@ -1235,7 +1226,7 @@ def main(page: ft.Page):
                                     ft.ElevatedButton(
                                         "install",
                                         bgcolor=base_color,
-                                        color=ft.colors.WHITE,
+                                        color=ft.Colors.WHITE,
                                         on_click=open_dlg_tecn,
                                     ),
                                 ],
@@ -1259,11 +1250,11 @@ def main(page: ft.Page):
                         [  # type: ignore
                             ft.AppBar(
                                 title=ft.Text("others :)", color=WHITE),
-                                bgcolor=ft.colors.RED_300,
+                                bgcolor=ft.Colors.RED_300,
                                 color=WHITE,
                                 actions=[  # type: ignore
                                     ft.IconButton(
-                                        ft.icons.CODE,
+                                        ft.Icons.CODE,
                                         on_click=open_dlg_credits,
                                     )
                                 ],
@@ -1288,7 +1279,7 @@ def main(page: ft.Page):
                                                                 width=150,
                                                                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                                                             ),
-                                                            bgcolor=ft.colors.GREY_600,
+                                                            bgcolor=ft.Colors.GREY_600,
                                                             border_radius=ft.border_radius.all(
                                                                 15
                                                             ),
@@ -1324,7 +1315,7 @@ def main(page: ft.Page):
                                                                 width=220,
                                                                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                                                             ),
-                                                            bgcolor=ft.colors.GREEN,
+                                                            bgcolor=ft.Colors.GREEN,
                                                             border_radius=ft.border_radius.all(
                                                                 15
                                                             ),
@@ -1362,7 +1353,7 @@ def main(page: ft.Page):
                                     ft.ElevatedButton(
                                         "install",
                                         bgcolor=base_color,
-                                        color=ft.colors.WHITE,
+                                        color=ft.Colors.WHITE,
                                         on_click=open_dlg_other,
                                     ),
                                 ],
@@ -1384,7 +1375,8 @@ def main(page: ft.Page):
     def view_pop(view):
         page.views.pop()
         top_view = page.views[-1]
-        page.go(top_view.route)
+        if top_view.route is not None:
+            page.go(top_view.route)
 
     # Unimos los cambios con las funciones, es decir cuando cambia
     # la ruta le asignamos la funcion de route_change,
